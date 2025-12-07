@@ -1,0 +1,67 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login" color="primary"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Buat Akun</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="register-container">
+    
+    <div class="header-text">
+      <h2>Daftar Baru</h2>
+      <p>Silahkan lengkapi data diri anda</p>
+    </div>
+
+    <ion-list lines="none">
+      
+      <ion-item class="input-item">
+        <ion-input 
+          label="Nama Lengkap" 
+          labelPlacement="floating" 
+          [(ngModel)]="fullname" 
+          placeholder="Nama Sesuai KTP">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="input-item">
+        <ion-input 
+          label="Email" 
+          labelPlacement="floating" 
+          type="email"
+          [(ngModel)]="email" 
+          placeholder="contoh@email.com">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="input-item">
+        <ion-input 
+          label="Password" 
+          labelPlacement="floating" 
+          type="password"
+          [(ngModel)]="password" 
+          helperText="Minimal 8 karakter"
+          placeholder="********">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="input-item">
+        <ion-input 
+          label="Ulangi Password" 
+          labelPlacement="floating" 
+          type="password"
+          [(ngModel)]="confirmPassword" 
+          placeholder="********">
+        </ion-input>
+      </ion-item>
+
+    </ion-list>
+
+    <ion-button expand="block" (click)="register()" class="main-btn">
+      DAFTAR SEKARANG
+    </ion-button>
+
+  </div>
+</ion-content>

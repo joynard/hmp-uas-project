@@ -1,0 +1,40 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="login-container">
+    
+    <div class="header-section">
+      <h1>Portal Berita</h1>
+      <p>Masuk untuk membaca berita terkini</p>
+    </div>
+
+    <ion-list lines="none">
+      <ion-item class="input-item">
+        <ion-input 
+          label="Email" 
+          labelPlacement="floating" 
+          type="email" 
+          [(ngModel)]="email" 
+          placeholder="Masukkan email anda">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="input-item">
+        <ion-input 
+          label="Password" 
+          labelPlacement="floating" 
+          type="password" 
+          [(ngModel)]="password" 
+          placeholder="********">
+        </ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" (click)="login()" class="main-btn">
+      MASUK
+    </ion-button>
+
+    <div class="footer-link">
+      <p>Belum punya akun? <a routerLink="/register">Daftar disini</a></p>
+    </div>
+
+  </div>
+</ion-content>
