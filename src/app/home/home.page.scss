@@ -1,27 +1,58 @@
-#container {
+.welcome-section {
+  margin-bottom: 30px;
+  h1 {
+    font-weight: 800;
+    color: var(--ion-color-dark);
+    margin-bottom: 5px;
+  }
+  p {
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
+.menu-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 20px;
   text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: transform 0.1s;
+  height: 100%;
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  // Efek klik
+  &:active {
+    transform: scale(0.95);
+  }
+
+  p {
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    color: #444;
+  }
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  ion-icon {
+    font-size: 24px;
+    color: white;
+  }
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
+// Warna-warni background icon
+.bg-blue { background: #3880ff; box-shadow: 0 4px 10px rgba(56, 128, 255, 0.3); }
+.bg-green { background: #2dd36f; box-shadow: 0 4px 10px rgba(45, 211, 111, 0.3); }
+.bg-orange { background: #ffc409; box-shadow: 0 4px 10px rgba(255, 196, 9, 0.3); }
+.bg-red { background: #eb445a; box-shadow: 0 4px 10px rgba(235, 68, 90, 0.3); }
+.bg-purple { background: #7044ff; box-shadow: 0 4px 10px rgba(112, 68, 255, 0.3); }
+.bg-grey { background: #5f5f5f; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }

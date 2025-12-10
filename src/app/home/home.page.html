@@ -1,20 +1,79 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div class="welcome-section">
+    <h1>Halo, {{ user?.fullname }}!</h1>
+    <p>Selamat datang di Portal Berita HMP.</p>
   </div>
+
+  <ion-grid>
+    <ion-row>
+      
+      <ion-col size="6">
+        <div class="menu-card" routerLink="/news-list">
+          <div class="icon-circle bg-blue">
+            <ion-icon name="newspaper-outline"></ion-icon>
+          </div>
+          <p>Baca Berita</p>
+        </div>
+      </ion-col>
+
+      <ion-col size="6">
+        <div class="menu-card" routerLink="/news-create">
+          <div class="icon-circle bg-green">
+            <ion-icon name="add-circle-outline"></ion-icon>
+          </div>
+          <p>Buat Berita</p>
+        </div>
+      </ion-col>
+
+      <ion-col size="6">
+        <div class="menu-card" routerLink="/categories">
+          <div class="icon-circle bg-orange">
+            <ion-icon name="grid-outline"></ion-icon>
+          </div>
+          <p>Kategori</p>
+        </div>
+      </ion-col>
+
+      <ion-col size="6">
+        <div class="menu-card" routerLink="/news-search">
+          <div class="icon-circle bg-purple">
+            <ion-icon name="search-outline"></ion-icon>
+          </div>
+          <p>Cari</p>
+        </div>
+      </ion-col>
+
+      <ion-col size="6">
+        <div class="menu-card" routerLink="/my-favorites">
+          <div class="icon-circle bg-red">
+            <ion-icon name="heart-outline"></ion-icon>
+          </div>
+          <p>Favoritku</p>
+        </div>
+      </ion-col>
+
+      <ion-col size="6">
+        <div class="menu-card" routerLink="/profile">
+          <div class="icon-circle bg-grey">
+            <ion-icon name="person-circle-outline"></ion-icon>
+          </div>
+          <p>Profil Saya</p>
+        </div>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
