@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core'; // 1. Tambah NgZone
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
@@ -20,12 +20,13 @@ export class LoginPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private zone: NgZone // 2. Inject NgZone di sini
   ) { }
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/app/home');
     }
   }
 
@@ -34,12 +35,19 @@ export class LoginPage implements OnInit {
       this.presentToast('Email dan Password harus diisi!');
       return;
     }
+
     this.authService.login(this.email, this.password).subscribe({
       next: (response: any) => {
         if (response.result === 'success') {
           this.authService.saveSession(response.data);
           this.presentToast('Selamat datang, ' + response.data.fullname);
-          this.router.navigateByUrl('/home'); // Masuk ke dashboard
+          
+          // 3. SOLUSI: Bungkus navigasi dengan NgZone.run()
+          // Ini memaksa Angular untuk segera update tampilan tanpa menunggu refresh
+          this.zone.run(() => {
+            this.router.navigateByUrl('/app/home');
+          });
+
         } else {
           this.presentToast(response.message || 'Login gagal!');
         }

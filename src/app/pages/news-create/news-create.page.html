@@ -1,13 +1,72 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>news-create</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Tulis Berita</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">news-create</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  
+  <ion-list lines="full">
+    
+    <ion-item>
+      <ion-input 
+        label="Judul Berita" 
+        labelPlacement="stacked" 
+        [(ngModel)]="title" 
+        placeholder="Masukkan judul menarik...">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select 
+        label="Pilih Kategori" 
+        labelPlacement="stacked"
+        [(ngModel)]="selectedCategories" 
+        multiple="true" 
+        placeholder="Pilih satu atau lebih">
+        
+        <ion-select-option *ngFor="let cat of categories" [value]="cat.id">
+          {{ cat.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-textarea 
+        label="Isi Berita" 
+        labelPlacement="stacked"
+        [(ngModel)]="description" 
+        rows="8"
+        placeholder="Tulis detail berita disini...">
+      </ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Foto Utama (Thumbnail)</ion-label>
+      <div class="file-input-wrapper">
+        <input type="file" (change)="onMainPhotoSelected($event)" accept="image/*">
+      </div>
+      <p class="hint" *ngIf="mainPhoto">File terpilih: {{ mainPhoto.name }}</p>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Foto Galeri (Min. 4)</ion-label>
+      <div class="file-input-wrapper">
+        <input type="file" multiple (change)="onExtraPhotosSelected($event)" accept="image/*">
+      </div>
+      <p class="hint" *ngIf="extraPhotos.length > 0">{{ extraPhotos.length }} foto terpilih</p>
+    </ion-item>
+
+  </ion-list>
+
+  <div class="ion-padding">
+    <ion-button expand="block" (click)="submit()" size="large">
+      <ion-icon slot="start" name="paper-plane-outline"></ion-icon>
+      TERBITKAN BERITA
+    </ion-button>
+  </div>
+
 </ion-content>

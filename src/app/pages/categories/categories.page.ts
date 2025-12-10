@@ -1,20 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonicModule, LoadingController } from '@ionic/angular';
+import { CategoryService } from 'src/app/services/category';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.page.html',
   styleUrls: ['./categories.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, RouterLink]
 })
 export class CategoriesPage implements OnInit {
 
-  constructor() { }
+  categories: any[] = [];
+
+  constructor(
+    private categoryService: CategoryService,
+    private loadingCtrl: LoadingController
+  ) { }
 
   ngOnInit() {
   }
 
+  ionViewWillEnter() {
+    this.loadData();
+  }
+
+  async loadData() {
+    const loading = await this.loadingCtrl.create({ message: 'Memuat kategori...' });
+    await loading.present();
+
+    this.categoryService.getCategories().subscribe({
+      next: (res: any) => {
+        this.categories = res;
+        loading.dismiss();
+      },
+      error: (err) => {
+        console.error(err);
+        loading.dismiss();
+      }
+    });
+  }
 }

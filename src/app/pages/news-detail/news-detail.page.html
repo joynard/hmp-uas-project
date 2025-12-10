@@ -1,13 +1,93 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>news-detail</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Baca Berita</ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="user.id == news.user_id" (click)="confirmDelete()" color="danger">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">news-detail</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  
+  <div class="image-slider">
+    <img [src]="news.thumbnail_url ? imgUrl + news.thumbnail_url : 'assets/no-img.png'" />
+    <img *ngFor="let img of images" [src]="imgUrl + img" />
+  </div>
+
+  <div class="ion-padding">
+    <h1 class="news-title">{{ news.title }}</h1>
+    <p class="news-meta">
+      Oleh <b>{{ news.author_name }}</b> • {{ news.created_at | date:'d MMM y HH:mm' }}
+    </p>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <ion-icon name="eye-outline"></ion-icon> {{ news.view_count }} Views
+      </div>
+      <div class="stat-item">
+        <ion-icon name="star" color="warning"></ion-icon> {{ news.avg_rating || 0 }} / 5.0
+      </div>
+    </div>
+
+    <p class="news-desc">{{ news.description }}</p>
+
+    <hr>
+
+    <div class="action-buttons">
+      <ion-button (click)="toggleFavorite()" [color]="isFavorite ? 'danger' : 'medium'" fill="outline">
+        <ion-icon [name]="isFavorite ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
+        {{ isFavorite ? 'Favorit Saya' : 'Tambah Favorit' }}
+      </ion-button>
+    </div>
+
+    <div class="rating-section ion-text-center">
+      <p>Beri Rating:</p>
+      <ion-icon *ngFor="let i of [1,2,3,4,5]" 
+        [name]="i <= userRating ? 'star' : 'star-outline'" 
+        (click)="rate(i)"
+        class="star-input">
+      </ion-icon>
+    </div>
+  </div>
+
+  <div class="comments-section ion-padding">
+    <h3>Komentar ({{ comments.length }})</h3>
+
+    <div *ngFor="let c of comments" class="comment-box">
+      <div class="comment-header">
+        <b>{{ c.fullname }}</b> <small>{{ c.created_at | date:'shortTime' }}</small>
+      </div>
+      <p>{{ c.content }}</p>
+      <div class="reply-btn" (click)="setReply(c)">Balas</div>
+
+      <div *ngFor="let r of c.replies" class="reply-box">
+        <div class="comment-header">
+          <b>{{ r.fullname }}</b> <small>{{ r.created_at | date:'shortTime' }}</small>
+        </div>
+        <p>{{ r.content }}</p>
+      </div>
+    </div>
+  </div>
+
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div *ngIf="replyTo" class="reply-info ion-padding-horizontal">
+      <small>Membalas: <b>{{ replyTo.fullname }}</b></small>
+      <ion-icon name="close-circle" (click)="cancelReply()"></ion-icon>
+    </div>
+
+    <ion-item lines="none">
+      <ion-input [(ngModel)]="newComment" placeholder="Tulis komentar..."></ion-input>
+      <ion-button (click)="sendComment()" slot="end" fill="clear">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>
