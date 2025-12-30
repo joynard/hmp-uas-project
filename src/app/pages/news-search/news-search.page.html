@@ -1,13 +1,156 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>news-search</ion-title>
+<ion-header translucent="true">
+  <ion-toolbar class="header-gradient">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>News Search</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="search-toolbar">
+    <ion-searchbar
+      placeholder="Cari judul berita..."
+      [value]="searchQuery"
+      (ionInput)="handleSearch($event)"
+      animated="true"
+      show-clear-button="always"
+      debounce="500"
+      class="custom-search">
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">news-search</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content fullscreen="true">
+
+  <!-- EMPTY STATE AWAL -->
+  <div *ngIf="!hasSearched" class="empty-state">
+    <ion-icon name="newspaper-outline"></ion-icon>
+    <h3>Cari Berita Terkini</h3>
+    <p>Masukkan kata kunci untuk menemukan berita favoritmu.</p>
+  </div>
+
+  <!-- HASIL PENCARIAN -->
+  <ion-list *ngIf="hasSearched && filteredNews.length > 0" lines="none">
+    <ion-card
+      *ngFor="let berita of filteredNews"
+      (click)="goToDetail(berita.id)"
+      class="news-card">
+
+        <!-- GAMBAR UTAMA -->
+        <ion-img
+          [src]="imgUrl + berita.thumbnail_url"
+          class="news-image"
+          loading="lazy">
+        </ion-img>
+
+      <ion-card-header>
+        <ion-card-title>{{ berita.title}}</ion-card-title>
+        <ion-card-subtitle>
+          <ion-chip
+            *ngFor="let kat of berita.kategori"
+            color="primary"
+            outline="true"
+            size="small">
+            {{ kat | titlecase }}
+          </ion-chip>
+        </ion-card-subtitle>
+      </ion-card-header>
+
+    </ion-card>
+  </ion-list>
+
+  <!-- EMPTY STATE TIDAK DITEMUKAN -->
+  <div
+    *ngIf="hasSearched && filteredNews.length === 0 && searchQuery.length > 0"
+    class="empty-state">
+    <ion-icon name="search-outline"></ion-icon>
+    <h3>Berita Tidak Ditemukan</h3>
+    <p>Tidak ada hasil untuk "<strong>{{ searchQuery }}</strong>"</p>
+  </div>
+
 </ion-content>
+
+<style>
+  /* HEADER */
+.header-gradient {
+  --background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  --color: #fff;
+}
+
+/* SEARCH BAR */
+.search-toolbar {
+  --background: transparent;
+  padding: 0 12px 12px;
+}
+
+.custom-search {
+  --background: #ffffff;
+  --border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* EMPTY STATE */
+.empty-state {
+  height: 65vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  text-align: center;
+  padding: 16px;
+
+  ion-icon {
+    font-size: 90px;
+    color: #cfd8dc;
+    margin-bottom: 12px;
+  }
+
+  h3 {
+    margin: 8px 0;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 14px;
+    color: #888;
+  }
+}
+
+  /* NEWS CARD */
+  .news-card {
+    margin: 12px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+  }
+
+  .news-card:active {
+    transform: scale(0.98);
+  }
+
+  /* GAMBAR DIKECILKAN */
+  .news-image {
+    height: 110px;        /* 🔽 dari 180px */
+    width: 100%;
+    object-fit: cover;
+  }
+
+  /* JUDUL DIBESARKAN */
+  ion-card-title {
+    font-size: 22px;      /* 🔥 lebih besar */
+    font-weight: 700;
+    line-height: 1.3;
+    color: #1a1a1a;
+  }
+
+  /* CHIP KATEGORI */
+  ion-card-subtitle {
+    margin-top: 10px;
+  }
+
+  ion-chip {
+    margin-right: 6px;
+    font-size: 11px;
+  }
+</style>
