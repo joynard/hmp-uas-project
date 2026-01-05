@@ -13,7 +13,7 @@ import { personOutline, mailOutline, lockClosedOutline } from 'ionicons/icons';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterLink]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class RegisterPage implements OnInit {
 
