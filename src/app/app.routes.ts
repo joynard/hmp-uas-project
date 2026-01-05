@@ -68,4 +68,8 @@ export const routes: Routes = [
     path: 'category-create',
     loadComponent: () => import('./pages/category-create/category-create.page').then( m => m.CategoryCreatePage)
   },
+  {
+    path: 'news-category/:id',
+    loadComponent: () => import('./pages/news-category/news-category.page').then( m => m.NewsCategoryPage)
+  },
 ];

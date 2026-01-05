@@ -1,0 +1,21 @@
+/* 1. PADDING SEARCH BAR*/
+.search-padding {
+  padding: 0 10px 10px 10px;
+}
+
+/* 2. CUSTOM SEARCH BAR */
+.custom-search {
+  --background: #ffffff;
+  --color: #000000;
+  --placeholder-color: #666666;
+  --icon-color: #666666;
+  
+  --border-radius: 10px;
+  --box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  
+  /* Reset margin bawaan agar pas di toolbar */
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}

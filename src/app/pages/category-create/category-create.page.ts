@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController, NavController } from '@ionic/angular';
 import { CategoryService } from 'src/app/services/category';
 
+import { addIcons } from 'ionicons';
+import { pricetagOutline } from 'ionicons/icons';
+
 @Component({
   selector: 'app-category-create',
   templateUrl: './category-create.page.html',
@@ -19,7 +22,7 @@ export class CategoryCreatePage implements OnInit {
     private categoryService: CategoryService,
     private toastCtrl: ToastController,
     private navCtrl: NavController // Untuk tombol Back
-  ) { }
+  ) { addIcons({ pricetagOutline });}
 
   ngOnInit() {
   }

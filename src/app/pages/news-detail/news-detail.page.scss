@@ -1,0 +1,204 @@
+/* 1. IMAGE SCROLLER */
+.image-scroller {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  background: #f0f0f0;
+  height: 250px;
+  
+  /* Sembunyikan scrollbar tapi tetap bisa scroll */
+  &::-webkit-scrollbar { display: none; }
+
+  img {
+    scroll-snap-align: center;
+    height: 100%;
+    min-width: 100%; /* Gambar memenuhi lebar layar */
+    object-fit: cover;
+  }
+}
+
+/* 2. TYPOGRAPHY & META */
+.news-title {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--ion-text-color);
+  margin-top: 0;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ion-color-medium);
+  font-size: 13px;
+  margin-bottom: 15px;
+  
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+  }
+}
+
+/* 3. STATS PILLS */
+.stats-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  .stat-pill {
+    background: var(--ion-color-light);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+/* 4. CONTENT DESCRIPTION */
+.news-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ion-text-color);
+  text-align: justify;
+}
+
+.divider {
+  margin: 30px 0;
+  background: var(--ion-color-light);
+  height: 1px;
+  border: none;
+}
+
+/* 5. RATING SECTION */
+.section-label {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin-bottom: 10px;
+}
+
+.stars-wrapper ion-icon {
+  font-size: 32px;
+  margin: 0 5px;
+  color: #ccc;
+  transition: transform 0.2s;
+
+  &.active { color: #ffc409; }
+  &:active { transform: scale(1.3); }
+}
+
+/* 6. COMMENTS SECTION */
+.comments-section {
+  background: var(--ion-item-background);
+  padding-bottom: 80px; 
+  border-top: 8px solid var(--ion-color-light); 
+  padding-top: 15px;
+
+  .badge {
+    background: var(--ion-color-primary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-left: 5px;
+  }
+}
+
+/* --- [PERBAIKAN DI SINI] --- */
+/* Kita pindah styling header ini KELUAR dari .comment-box 
+   agar .reply-box juga kebagian styling yang sama.
+*/
+.comment-header {
+  display: flex;
+  justify-content: space-between; /* Ini kunci agar Nama (kiri) dan Jam (kanan) pisah */
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 6px;
+
+  b { 
+    font-weight: 700; 
+    color: var(--ion-text-color); 
+  }
+  
+  small { 
+    color: var(--ion-color-medium); 
+    margin-left: 10px; /* Jaga-jaga kasih jarak aman */
+    white-space: nowrap; /* Agar jam tidak turun baris */
+  }
+}
+/* --------------------------- */
+
+.comment-box {
+  margin-bottom: 15px;
+  
+  /* HAPUS .comment-header DARI SINI (karena sudah dipindah ke atas) */
+
+  p { 
+    margin: 0; 
+    font-size: 14px; 
+    line-height: 1.4; 
+    color: var(--ion-text-color);
+  }
+
+  .reply-trigger {
+    font-size: 12px;
+    color: var(--ion-color-primary);
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    display: inline-block;
+    padding: 4px 0;
+  }
+}
+
+/* Balasan (Indented) */
+.reply-box {
+  margin-left: 20px; 
+  padding-left: 15px;
+  border-left: 3px solid var(--ion-color-light); /* Garis sedikit lebih tebal biar jelas */
+  margin-top: 12px;
+  
+  /* Sekarang .comment-header otomatis aktif di sini juga! */
+  
+  p { 
+    font-size: 13px; 
+    color: var(--ion-color-step-600); 
+    line-height: 1.4; 
+  }
+}
+
+/* 7. FOOTER INPUT */
+.comment-toolbar {
+  --background: var(--ion-background-color);
+  border-top: 1px solid var(--ion-color-light);
+  padding: 5px;
+}
+
+.reply-info {
+  background: var(--ion-color-light);
+  padding: 5px 10px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  background: var(--ion-color-light);
+  border-radius: 25px;
+  padding: 0 5px 0 15px;
+
+  .comment-input {
+    --background: transparent;
+    --padding-start: 0;
+    font-size: 14px;
+  }
+}

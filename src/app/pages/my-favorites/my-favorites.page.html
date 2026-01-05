@@ -1,13 +1,37 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>my-favorites</ion-title>
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="header-gradient">
+    <ion-buttons slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Favorit Saya</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">my-favorites</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding-top">
+
+  <div *ngIf="favorites.length === 0" class="empty-state">
+    <ion-icon name="newspaper-outline"></ion-icon>
+    <h3>Belum Ada Favorit</h3>
+    <p>Tandai berita dengan icon hati untuk menyimpannya di sini.</p>
+  </div>
+
+  <ion-list lines="none">
+    <ion-card *ngFor="let item of favorites" (click)="goToDetail(item.id)" button class="news-card">
+      
+      <div class="card-img-wrapper">
+        <img [src]="item.thumbnail_url ? imgUrl + item.thumbnail_url : 'assets/no-img.png'" />
+        
+        <div class="delete-btn" (click)="removeFavorite($event, item.id)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </div>
+      </div>
+
+      <ion-card-header>
+        <ion-card-subtitle>{{ item.author_name }} • {{ item.created_at | date:'d MMM y' }}</ion-card-subtitle>
+        <ion-card-title>{{ item.title }}</ion-card-title>
+      </ion-card-header>
+
+    </ion-card>
+  </ion-list>
+
 </ion-content>

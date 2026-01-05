@@ -6,6 +6,17 @@ import { NewsService } from 'src/app/services/news';
 import { CategoryService } from 'src/app/services/category';
 import { AuthService } from 'src/app/services/auth';
 
+import { addIcons } from 'ionicons';
+import { 
+  paperPlaneOutline, 
+  newspaperOutline, 
+  gridOutline, 
+  documentTextOutline, 
+  imageOutline, 
+  imagesOutline,
+  checkmarkCircle
+} from 'ionicons/icons';
+
 @Component({
   selector: 'app-news-create',
   templateUrl: './news-create.page.html',
@@ -34,7 +45,17 @@ export class NewsCreatePage implements OnInit {
     private authService: AuthService,
     private toastCtrl: ToastController,
     private navCtrl: NavController
-  ) { }
+  ) {
+    addIcons({ 
+      paperPlaneOutline, 
+      newspaperOutline, 
+      gridOutline, 
+      documentTextOutline, 
+      imageOutline, 
+      imagesOutline,
+      checkmarkCircle
+    });
+   }
 
   ngOnInit() {
     this.user = this.authService.getUser();

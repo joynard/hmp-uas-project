@@ -5,6 +5,9 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/services/auth';
 
+import { addIcons } from 'ionicons';
+import { personOutline, mailOutline, lockClosedOutline } from 'ionicons/icons';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
@@ -23,7 +26,7 @@ export class RegisterPage implements OnInit {
     private authService: AuthService,
     private toastController: ToastController,
     private router: Router
-  ) { }
+  ) { addIcons({ personOutline, mailOutline, lockClosedOutline });}
 
   ngOnInit() { }
 

@@ -1,9 +1,12 @@
 {
-  "name": "app",
-  "short_name": "app",
+  "name": "HMP News Portal ApaNamanya",
+  "short_name": "HMP ApaNamanya",
+  "theme_color": "#1e1e1e",
+  "background_color": "#121212",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icons/icon-72x72.png",

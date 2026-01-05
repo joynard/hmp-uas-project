@@ -18,17 +18,23 @@ export class NewsService {
     return this.http.get(url);
   }
 
+  getNewsByCategory(categoryId: any) {
+    const time = new Date().getTime();
+    return this.http.get(environment.apiKey + 'news_category.php?id=' + categoryId + '&t=' + time);
+  }
+
   createNews(formData: FormData) {
     return this.http.post(environment.apiKey + 'news.php', formData);
   }
 
-  getNewsDetail(id: number) {
-    return this.http.get(environment.apiKey + 'news.php?id=' + id);
+  getNewsDetail(id: number, isView: boolean = false) {
+    return this.http.get(environment.apiKey + 'news.php?id=' + id + '&is_view=' + isView);
   }
 
   // 2. Ambil Komentar
   getComments(news_id: number) {
-    return this.http.get(environment.apiKey + 'comments.php?news_id=' + news_id);
+    // HAPUS huruf 's' di sini
+    return this.http.get(environment.apiKey + 'comment.php?news_id=' + news_id);
   }
 
   // 3. Kirim Komentar (Bisa Reply jika ada parent_id)
@@ -40,7 +46,7 @@ export class NewsService {
     body.set('content', content);
     if (parent_id) body.set('parent_id', parent_id.toString());
 
-    return this.http.post(environment.apiKey + 'comments.php', body.toString(), { headers });
+    return this.http.post(environment.apiKey + 'comment.php', body.toString(), { headers });
   }
 
   // 4. Kirim Rating
@@ -73,5 +79,10 @@ export class NewsService {
   // 7. Hapus Berita
   deleteNews(id: number) {
     return this.http.get(environment.apiKey + 'news.php?action=delete&id=' + id);
+  }
+
+  // 8. get user rating for a news item
+  getMyRating(news_id: number, user_id: number) {
+    return this.http.get(environment.apiKey + 'actions.php?action=get_rate&news_id=' + news_id + '&user_id=' + user_id);
   }
 }

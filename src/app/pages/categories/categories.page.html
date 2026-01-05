@@ -1,7 +1,7 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="header-gradient">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
     <ion-title>Daftar Kategori</ion-title>
   </ion-toolbar>
@@ -9,21 +9,39 @@
 
 <ion-content [fullscreen]="true">
   
-  <div *ngIf="categories.length === 0" class="ion-text-center ion-padding">
-    <p>Belum ada kategori.</p>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Tarik untuk refresh"
+      refreshingSpinner="circles"
+      refreshingText="Memuat ulang...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="categories.length === 0" class="empty-state">
+    <ion-icon name="pricetags-outline"></ion-icon>
+    <h3>Belum Ada Kategori</h3>
+    <p>Tekan tombol + untuk menambahkan kategori baru.</p>
   </div>
 
-  <ion-list>
-    <ion-item *ngFor="let item of categories" button detail>
-      <ion-icon slot="start" name="pricetag-outline" color="secondary"></ion-icon>
+  <ion-list lines="full" *ngIf="categories.length > 0">
+    
+    <ion-item 
+      *ngFor="let item of categories" 
+      button 
+      detail 
+      [routerLink]="['/news-category', item.id]">
+      
+      <ion-icon slot="start" name="pricetag-outline" color="primary"></ion-icon>
       <ion-label>
         <h2>{{ item.name }}</h2>
       </ion-label>
     </ion-item>
+
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button routerLink="/category-create">
+    <ion-fab-button routerLink="/category-create" class="header-gradient">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

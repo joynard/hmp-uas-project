@@ -10,15 +10,13 @@ export class CategoryService {
   constructor(private http: HttpClient) { }
 
   getCategories() {
-    return this.http.get(environment.apiKey + 'categories.php');
+    const timestamp = new Date().getTime(); // Untuk mencegah cache
+    return this.http.get(environment.apiKey + 'categories.php?t=' + timestamp);
   }
 
   createCategory(name: string) {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
-    
-    const body = new URLSearchParams();
-    body.set('name', name);
-    
-    return this.http.post(environment.apiKey + 'categories.php', body.toString(), { headers });
+    const header = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    const body = 'name=' + name;
+    return this.http.post(environment.apiKey + 'categories.php', body, { headers: header });
   }
 }

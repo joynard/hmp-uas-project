@@ -12,7 +12,8 @@ import {
   personCircleOutline,
   addCircleOutline,
   duplicateOutline, 
-  logOutOutline 
+  logOutOutline,
+  newspaperOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -27,6 +28,11 @@ export class AppComponent {
     private authService: AuthService,
     private router: Router
   ) {
+    this.authService.loadTheme();
+
+    const isDark = this.authService.isDarkMode();
+    document.body.classList.toggle('dark', isDark);
+
     // Registrasi semua icon yang dipakai di menu
     addIcons({ 
       homeOutline, 
@@ -36,7 +42,8 @@ export class AppComponent {
       personCircleOutline,
       addCircleOutline,
       duplicateOutline,
-      logOutOutline 
+      logOutOutline,
+      newspaperOutline
     });
   }
 

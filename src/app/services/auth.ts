@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  themeColor = new BehaviorSubject<string>('blue');
+
+  constructor(private http: HttpClient) {
+    this.loadTheme();
+   }
 
   register(fullname: string, email: string, password: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -50,4 +55,40 @@ export class AuthService {
   isLoggedIn() {
     return localStorage.getItem('hmp_user') !== null;
   }
+
+  // 1. FUNGSI UPDATE PROFIL + FOTO
+  updateProfile(userId: number, fullname: string, avatarFile: File | null) {
+    const formData = new FormData();
+    formData.append('user_id', userId.toString());
+    formData.append('fullname', fullname);
+    if (avatarFile) {
+      formData.append('avatar', avatarFile);
+    }
+    return this.http.post(environment.apiKey + 'profile.php', formData);
+  }
+
+  // 2. FUNGSI TEMA (LocalStorage)
+  setTheme(colorName: string) {
+    localStorage.setItem('theme_color', colorName);
+    this.themeColor.next(colorName); // Beritahu seluruh aplikasi warna berubah
+    
+    // Update CSS Variable secara global
+    document.body.setAttribute('color-theme', colorName);
+  }
+
+  loadTheme() {
+    const savedColor = localStorage.getItem('theme_color') || 'blue';
+    this.setTheme(savedColor);
+  }
+
+  // 3. FUNGSI DARK MODE
+  toggleDarkMode(isDark: boolean) {
+    document.body.classList.toggle('dark', isDark);
+    localStorage.setItem('dark_mode', isDark ? 'true' : 'false');
+  }
+
+  isDarkMode() {
+    return localStorage.getItem('dark_mode') === 'true';
+  }
+  
 }

@@ -1,55 +1,55 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="header-gradient">
+    
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="/app/home" color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title>
-      Portal Berita
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="logout()">
-        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+    
+    <ion-title>Semua Berita</ion-title>
+
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding-top">
   
   <div class="welcome-box ion-padding-horizontal">
     <p>Halo, <b>{{ userParams?.fullname }}</b></p>
-    <h2>Berita Terkini</h2>
+    <h2>Daftar Berita</h2>
   </div>
 
-  <div *ngIf="newsList.length === 0" class="ion-text-center ion-padding">
-    <ion-spinner></ion-spinner>
-    <p>Memuat berita...</p>
+  <div *ngIf="newsList.length === 0" class="empty-state">
+    <ion-spinner color="primary"></ion-spinner>
+    <p class="ion-margin-top">Sedang memuat berita...</p>
   </div>
 
-  <ion-card *ngFor="let item of newsList" [routerLink]="['/news-detail', item.id]">
-    
-    <img [src]="item.thumbnail_url ? imgUrl + item.thumbnail_url : 'https://via.placeholder.com/400x200?text=No+Image'" 
-         style="width: 100%; height: 180px; object-fit: cover;" />
-    
-    <ion-card-header>
-      <ion-card-subtitle>{{ item.author_name }} • {{ item.created_at | date:'d MMM y' }}</ion-card-subtitle>
-      <ion-card-title>{{ item.title }}</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <p>{{ item.description.substring(0, 100) }}...</p>
+  <div *ngFor="let item of newsList">
+    <ion-card class="news-card" [routerLink]="['/news-detail', item.id]" button>
       
-      <div class="card-footer">
-        <span class="rating">
-          <ion-icon name="star" color="warning"></ion-icon> 
-          {{ item.avg_rating }}
-        </span>
-        <span class="comments">
-          <ion-icon name="chatbubble-outline"></ion-icon> 
-          {{ item.comment_count }} Komentar
-        </span>
+      <div class="card-img-wrapper">
+        <img [src]="item.thumbnail_url ? imgUrl + item.thumbnail_url : 'assets/no-img.png'" />
       </div>
-    </ion-card-content>
-  </ion-card>
+      
+      <ion-card-header>
+        <ion-card-subtitle>{{ item.author_name }} • {{ item.created_at | date:'d MMM' }}</ion-card-subtitle>
+        <ion-card-title>{{ item.title }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>{{ item.description.substring(0, 80) }}...</p>
+        
+        <div class="card-footer">
+          <span class="rating">
+            <ion-icon name="star" color="warning"></ion-icon> 
+            {{ item.avg_rating }}
+          </span>
+          <span class="comments">
+            <ion-icon name="chatbubble-outline" color="primary"></ion-icon> 
+            {{ item.comment_count }} Komentar
+          </span>
+        </div>
+      </ion-card-content>
+
+    </ion-card>
+  </div>
 
 </ion-content>

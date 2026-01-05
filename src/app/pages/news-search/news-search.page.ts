@@ -1,17 +1,9 @@
-// import { Component, OnInit } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { FormsModule } from '@angular/forms';
-// import { IonicModule, LoadingController } from '@ionic/angular';
-// import { CategoryService } from 'src/app/services/category';
-// import { RouterLink } from '@angular/router';
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Router, RouterLink } from '@angular/router';
-import { NewsService } from 'src/app/services/news';
-import { AuthService } from 'src/app/services/auth';
+import { Router } from '@angular/router'; // Hapus RouterLink tak terpakai
+import { NewsService } from 'src/app/services/news'; // Sesuaikan path service kamu
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -23,23 +15,30 @@ import { environment } from 'src/environments/environment';
 })
 export class NewsSearchPage implements OnInit {
 
-  searchQuery: string = ''; // String untuk menyimpan teks pencarian user
-  allNews: any[] = []; // Array semua berita yang ada (data asli)
-  filteredNews: any[] = []; // Array berita hasil pencarian
-  hasSearched: boolean = true; // Untuk melacak apakah pencarian sudah dilakukan
+  searchQuery: string = '';
+  allNews: any[] = [];
+  filteredNews: any[] = [];
+  
+  // UBAH JADI FALSE: Agar tampilan awal "Ayo Cari Berita" muncul
+  hasSearched: boolean = false; 
+  
   imgUrl = environment.apiKey + 'uploads/';
 
   constructor(
-    private newsService: NewsService, // akses data berita dari service
-    private router: Router // untuk navigasi ke detail
+    private newsService: NewsService,
+    private router: Router
   ) { }
+
+  ngOnInit() {
+    // Kita load data sekali saja saat awal
+    this.loadNews();
+  }
 
   loadNews() {
     this.newsService.getNews().subscribe({
       next: (res: any) => {
-        // Karena format JSON kita array of objects
         this.allNews = res;
-        this.filteredNews = res;
+        // Kita tidak mengisi filteredNews disini agar layar tetap bersih sebelum search
       },
       error: (err) => {
         console.error(err);
@@ -47,44 +46,26 @@ export class NewsSearchPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.filteredNews = []; 
-    // this.loadNews();
-    // Kosongkan hasil pencarian (belum search)
-    
-  }
-
-  ionViewWillEnter() {
-    this.loadNews();
-  }
-
-  // Method dipanggil tiap kali pengguna mengetik di search bar
   handleSearch(event: any) {
-
-    // Ambil teks input & ubah ke lowercase supaya pencarian case-insensitive
     const query = event.target.value.toLowerCase();
     this.searchQuery = query;
+    this.hasSearched = true;
 
-    // Set nilai: user sudah melakukan search
-    this.hasSearched = true; // Ubah hasSearched menjadi true saat search dilakukan
-
-    // Jika input tidak kosong
     if (query && query.trim() !== '') {
-      
-      // Filter daftar berita berdasarkan judul yang cocok dengan query
       this.filteredNews = this.allNews.filter((berita) => {
+        // Search berdasarkan Judul
         return berita.title.toLowerCase().includes(query);
       });
     } else {
-      this.filteredNews = this.allNews; // If search bar kosong kosongkan juga hasilnya
+      // Jika dihapus, kosongkan lagi
+      this.filteredNews = [];
+      this.hasSearched = false; // Reset state
     }
-    
   }
 
-  //Navigasi ke halaman detail berita.
-  goToDetail(id: string) {
-    // Kirim parameter lewat state Angular Router
-    this.router.navigate(['./news-detail/'+id], { state: { beritaId: id } });
-    
+  goToDetail(id: any) {
+    // PERBAIKAN PENTING: Gunakan /news-detail (bukan ./news-detail)
+    // Sesuai dengan routes yang kita buat sebelumnya
+    this.router.navigate(['/news-detail', id]);
   }
 }

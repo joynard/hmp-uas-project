@@ -1,7 +1,7 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="header-gradient">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/app/categories"></ion-back-button>
+      <ion-back-button defaultHref="/app/categories" color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>Tambah Kategori</ion-title>
   </ion-toolbar>
@@ -10,8 +10,10 @@
 <ion-content class="ion-padding">
   
   <div class="form-wrapper">
-    <ion-list lines="full">
-      <ion-item>
+    
+    <ion-list lines="none">
+      <ion-item class="custom-input">
+        <ion-icon name="pricetag-outline" slot="start" color="medium"></ion-icon>
         <ion-input 
           label="Nama Kategori" 
           labelPlacement="stacked" 
@@ -21,11 +23,10 @@
       </ion-item>
     </ion-list>
 
-    <div class="ion-padding-top">
-      <ion-button expand="block" (click)="submit()">
-        SIMPAN
-      </ion-button>
-    </div>
+    <ion-button expand="block" (click)="submit()" class="btn-submit header-gradient">
+      SIMPAN
+    </ion-button>
+    
   </div>
 
 </ion-content>

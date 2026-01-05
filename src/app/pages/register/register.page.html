@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar class="header-gradient">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/login" color="primary"></ion-back-button>
+      <ion-back-button defaultHref="/login" color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>Buat Akun</ion-title>
   </ion-toolbar>
@@ -17,29 +17,32 @@
 
     <ion-list lines="none">
       
-      <ion-item class="input-item">
+      <ion-item class="custom-input">
+        <ion-icon name="person-outline" slot="start" color="medium"></ion-icon>
         <ion-input 
           label="Nama Lengkap" 
-          labelPlacement="floating" 
+          labelPlacement="stacked" 
           [(ngModel)]="fullname" 
           placeholder="Nama Sesuai KTP">
         </ion-input>
       </ion-item>
 
-      <ion-item class="input-item">
+      <ion-item class="custom-input">
+        <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
         <ion-input 
           label="Email" 
-          labelPlacement="floating" 
+          labelPlacement="stacked" 
           type="email"
           [(ngModel)]="email" 
           placeholder="contoh@email.com">
         </ion-input>
       </ion-item>
 
-      <ion-item class="input-item">
+      <ion-item class="custom-input">
+        <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
         <ion-input 
           label="Password" 
-          labelPlacement="floating" 
+          labelPlacement="stacked" 
           type="password"
           [(ngModel)]="password" 
           helperText="Minimal 8 karakter"
@@ -47,10 +50,11 @@
         </ion-input>
       </ion-item>
 
-      <ion-item class="input-item">
+      <ion-item class="custom-input">
+        <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
         <ion-input 
           label="Ulangi Password" 
-          labelPlacement="floating" 
+          labelPlacement="stacked" 
           type="password"
           [(ngModel)]="confirmPassword" 
           placeholder="********">
@@ -59,7 +63,7 @@
 
     </ion-list>
 
-    <ion-button expand="block" (click)="register()" class="main-btn">
+    <ion-button expand="block" (click)="register()" class="btn-submit header-gradient">
       DAFTAR SEKARANG
     </ion-button>
 

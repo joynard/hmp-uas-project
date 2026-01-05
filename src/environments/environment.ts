@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiKey: 'https://ubaya.cloud/hybrid/160423232/'
+  apiKey: 'https://ubaya.cloud/hybrid/160423232/',
+  imgUrl: 'https://ubaya.cloud/hybrid/160423232/uploads/'
 };
 
 /*

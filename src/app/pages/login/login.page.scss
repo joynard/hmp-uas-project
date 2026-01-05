@@ -1,45 +1,45 @@
+/* Layout Tengah Halaman */
 .login-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100%; 
+  max-width: 400px; /* Agar tidak terlalu lebar di tablet/PC */
+  margin: 0 auto;
 }
 
+/* Header Text */
 .header-section {
   text-align: center;
   margin-bottom: 40px;
 
   h1 {
-    font-weight: bold;
+    font-size: 28px;
+    font-weight: 800;
+    /* Warna mengikuti tema global */
     color: var(--ion-color-primary);
-    margin-bottom: 5px;
+    margin-bottom: 8px;
   }
   p {
     color: var(--ion-color-medium);
     font-size: 14px;
+    margin-top: 0;
   }
 }
 
-.input-item {
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  --background: transparent;
-}
-
-.main-btn {
-  margin-top: 20px;
-  --border-radius: 10px;
-}
-
+/* Footer Link */
 .footer-link {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 25px;
   font-size: 14px;
+  color: var(--ion-color-medium);
 
   a {
     text-decoration: none;
     font-weight: bold;
     color: var(--ion-color-primary);
+    transition: opacity 0.2s;
+    
+    &:active { opacity: 0.7; }
   }
 }

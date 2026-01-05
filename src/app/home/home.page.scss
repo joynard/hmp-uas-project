@@ -1,38 +1,134 @@
+/* 1. WELCOME SECTION */
+.welcome-section {
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--ion-text-color);
+  }
+  .user-name {
+    color: var(--ion-color-primary); /* Nama user warna biru/sesuai tema */
+  }
+  p {
+    margin: 0;
+    color: var(--ion-color-medium);
+    font-size: 14px;
+  }
+}
+
+/* 2. SECTION HEADER (Judul & Tombol Lihat Semua) */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+  }
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+/* 3. HIGHLIGHT CONTAINER (Horizontal Scroll) */
 .highlight-container {
   display: flex;
   overflow-x: auto;
   gap: 15px;
-  padding-bottom: 10px;
+  padding-bottom: 15px; /* Space untuk shadow bawah */
+  padding-left: 2px; /* Space dikit biar shadow kiri ga kepotong */
+  
+  /* Scroll Snap agar berhenti pas di tengah kartu */
+  scroll-snap-type: x mandatory; 
+  &::-webkit-scrollbar { display: none; }
 
   .highlight-card {
-    min-width: 250px;
-    height: 150px;
-    border-radius: 10px;
+    min-width: 260px;
+    height: 160px;
+    border-radius: 16px; /* Konsisten dengan Global */
     position: relative;
     overflow: hidden;
+    scroll-snap-align: start;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* Shadow lebih lembut */
     
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.3s;
     }
+
+    /* Efek Zoom dikit saat dipencet */
+    &:active img { transform: scale(1.05); }
+
     .card-info {
       position: absolute;
       bottom: 0;
       width: 100%;
-      background: rgba(0,0,0,0.6);
+      /* Gradient hitam transparan supaya teks terbaca */
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
       color: white;
-      padding: 8px;
-      h6 { margin: 0; font-size: 14px; }
+      padding: 20px 12px 12px 12px;
+      
+      h6 { 
+        margin: 0; 
+        font-size: 14px; 
+        font-weight: 600;
+        line-height: 1.4;
+        /* Batasi teks max 2 baris */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
     }
+  }
+
+  .empty-highlight {
+    padding: 20px;
+    color: var(--ion-color-medium);
+    font-style: italic;
   }
 }
 
+/* 4. MENU CEPAT (Grid) */
 .menu-box {
-  background: #f4f5f8;
-  padding: 15px;
-  border-radius: 10px;
+  background: var(--ion-card-background, #fff); /* Putih atau Dark Mode */
+  padding: 20px;
+  border-radius: 16px;
   text-align: center;
-  ion-icon { font-size: 30px; display: block; margin: 0 auto 5px auto; }
-  span { font-weight: bold; font-size: 12px; }
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Shadow halus */
+  transition: transform 0.2s;
+  height: 100%;
+  
+  /* Efek pencet */
+  &:active { transform: scale(0.95); }
+
+  .icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    ion-icon { font-size: 24px; color: white; }
+
+    /* Warna Icon Circle */
+    &.green { background: linear-gradient(135deg, #2dd36f, #28ba62); box-shadow: 0 4px 10px rgba(45, 211, 111, 0.3); }
+    &.orange { background: linear-gradient(135deg, #ffc409, #eb445a); box-shadow: 0 4px 10px rgba(255, 196, 9, 0.3); }
+  }
+
+  span { 
+    font-weight: 700; 
+    font-size: 13px; 
+    color: var(--ion-text-color);
+  }
 }

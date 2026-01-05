@@ -7,6 +7,20 @@ import { NewsService } from 'src/app/services/news';
 import { AuthService } from 'src/app/services/auth';
 import { environment } from 'src/environments/environment';
 
+import { addIcons } from 'ionicons';
+import { 
+  send, 
+  trashOutline, 
+  eyeOutline, 
+  star, 
+  starOutline, 
+  heart, 
+  heartOutline, 
+  closeCircle,
+  paperPlaneOutline,
+  personCircleOutline,
+} from 'ionicons/icons';
+
 @Component({
   selector: 'app-news-detail',
   templateUrl: './news-detail.page.html',
@@ -39,7 +53,20 @@ export class NewsDetailPage implements OnInit {
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private navCtrl: NavController
-  ) { }
+  ) {
+    addIcons({ 
+      send, 
+      trashOutline, 
+      eyeOutline, 
+      star, 
+      starOutline, 
+      heart, 
+      heartOutline, 
+      closeCircle,
+      paperPlaneOutline,
+      personCircleOutline
+    });
+   }
 
   ngOnInit() {
     this.user = this.authService.getUser();
@@ -47,34 +74,46 @@ export class NewsDetailPage implements OnInit {
     this.newsId = Number(this.route.snapshot.paramMap.get('id'));
     
     if(this.newsId) {
-      this.loadNewsDetail();
+      this.loadNewsDetail(true);
       this.loadComments();
       this.checkFavoriteStatus();
+      this.checkMyRating();
     }
   }
 
-  loadNewsDetail() {
-    this.newsService.getNewsDetail(this.newsId).subscribe((res: any) => {
+  loadNewsDetail(isView: boolean = false) {
+    this.newsService.getNewsDetail(this.newsId, isView).subscribe((res: any) => {
       if(res.result === 'success') {
         this.news = res.news;
-        this.images = res.images; // Array foto detail
-        // Set rating user jika sudah pernah rate (ini bisa dikembangkan, sementara 0)
+        this.images = res.images;
       }
     });
   }
 
   loadComments() {
     this.newsService.getComments(this.newsId).subscribe((res: any) => {
-      // Kita perlu menyusun komentar menjadi Parent -> Children
-      // Filter komentar induk (parent_id null)
+      // Filter hanya komentar induk (parent_id null atau 0)
       const parents = res.filter((c: any) => !c.parent_id);
       
-      // Masukkan children ke dalam parent masing-masing
+      // Masukkan balasan (replies) ke induknya masing-masing
       parents.forEach((p: any) => {
+        // Gunakan '==' (bukan ===) agar angka dan string cocok
         p.replies = res.filter((c: any) => c.parent_id == p.id);
       });
 
       this.comments = parents;
+    });
+  }
+
+  checkMyRating() {
+    this.newsService.getMyRating(this.newsId, this.user.id).subscribe((res: any) => {
+      if (res.result === 'success') {
+        // Update tampilan bintang sesuai rating user di database
+        this.userRating = parseInt(res.score);
+      } else {
+        // Jika belum rate, set 0
+        this.userRating = 0;
+      }
     });
   }
 
@@ -129,7 +168,7 @@ export class NewsDetailPage implements OnInit {
     this.userRating = score;
     this.newsService.addRating(this.newsId, this.user.id, score).subscribe(() => {
       this.showToast(`Anda memberi rating ${score}/5`);
-      this.loadNewsDetail(); // Refresh rata-rata rating
+      this.loadNewsDetail(false); 
     });
   }
 

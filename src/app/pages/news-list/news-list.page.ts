@@ -7,6 +7,9 @@ import { NewsService } from 'src/app/services/news';
 import { AuthService } from 'src/app/services/auth';
 import { environment } from 'src/environments/environment';
 
+import { addIcons } from 'ionicons';
+import { logOutOutline, star, chatbubbleOutline } from 'ionicons/icons';
+
 @Component({
   selector: 'app-news-list',
   templateUrl: './news-list.page.html',
@@ -27,6 +30,7 @@ export class NewsListPage implements OnInit {
   ) { 
     // Ambil data user yang sedang login buat ditampilkan namanya
     this.userParams = this.authService.getUser();
+    addIcons({ logOutOutline, star, chatbubbleOutline });
   }
 
   ngOnInit() {

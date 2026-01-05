@@ -1,16 +1,68 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="header-gradient">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
-    <ion-title>Profile</ion-title>
+    <ion-title>Profil Saya</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+
+  <div class="profile-header ion-text-center">
+    <div class="avatar-wrapper" (click)="fileInput.click()">
+      <img [src]="user.avatar ? imgUrl + user.avatar : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+      <div class="edit-icon">
+        <ion-icon name="camera"></ion-icon>
+      </div>
+    </div>
+    <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+    
+    <h2 class="ion-margin-top">{{ user.fullname }}</h2>
+    <p class="email-text">{{ user.email }}</p>
+  </div>
+
+  <div class="ion-margin-top">
+    <ion-list lines="none">
+      <ion-item class="custom-input">
+        <ion-icon name="person-outline" slot="start" color="medium"></ion-icon>
+        <ion-input 
+          label="Nama Lengkap" 
+          labelPlacement="stacked" 
+          [(ngModel)]="editName">
+        </ion-input>
+      </ion-item>
+    </ion-list>
+    
+    <ion-button expand="block" (click)="saveProfile()" class="btn-submit header-gradient">
+      SIMPAN PERUBAHAN
+    </ion-button>
+  </div>
+
+  <div class="theme-section ion-margin-top ion-padding-top">
+    <h3>Tampilan Aplikasi</h3>
+    
+    <ion-item lines="none" class="theme-card">
+      <ion-icon name="moon" slot="start" color="dark"></ion-icon>
+      <ion-label>Mode Gelap</ion-label>
+      <ion-toggle [(ngModel)]="isDark" (ionChange)="toggleDark($event)"></ion-toggle>
+    </ion-item>
+
+    <div class="color-picker ion-margin-top">
+      <p><small>Pilih Warna Tema:</small></p>
+      <div class="colors-row">
+        <div class="color-circle blue"   (click)="changeTheme('blue')"   [class.active]="currentTheme=='blue'"></div>
+        <div class="color-circle purple" (click)="changeTheme('purple')" [class.active]="currentTheme=='purple'"></div>
+        <div class="color-circle orange" (click)="changeTheme('orange')" [class.active]="currentTheme=='orange'"></div>
+        <div class="color-circle red"    (click)="changeTheme('red')"    [class.active]="currentTheme=='red'"></div>
+        <div class="color-circle green"  (click)="changeTheme('green')"  [class.active]="currentTheme=='green'"></div>
+      </div>
+    </div>
+  </div>
+
 </ion-content>

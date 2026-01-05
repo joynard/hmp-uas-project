@@ -1,34 +1,40 @@
 <ion-content [fullscreen]="true" class="ion-padding">
+  
   <div class="login-container">
     
     <div class="header-section">
+      <ion-icon name="newspaper" color="primary" style="font-size: 60px; margin-bottom: 10px;"></ion-icon>
       <h1>Portal Berita</h1>
       <p>Masuk untuk membaca berita terkini</p>
     </div>
 
     <ion-list lines="none">
-      <ion-item class="input-item">
+      
+      <ion-item class="custom-input">
+        <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
         <ion-input 
           label="Email" 
-          labelPlacement="floating" 
+          labelPlacement="stacked" 
           type="email" 
           [(ngModel)]="email" 
-          placeholder="Masukkan email anda">
+          placeholder="Contoh: user@email.com">
         </ion-input>
       </ion-item>
 
-      <ion-item class="input-item">
+      <ion-item class="custom-input">
+        <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
         <ion-input 
           label="Password" 
-          labelPlacement="floating" 
+          labelPlacement="stacked" 
           type="password" 
           [(ngModel)]="password" 
           placeholder="********">
         </ion-input>
       </ion-item>
+
     </ion-list>
 
-    <ion-button expand="block" (click)="login()" class="main-btn">
+    <ion-button expand="block" (click)="login()" class="btn-submit header-gradient">
       MASUK
     </ion-button>
 

@@ -1,46 +1,55 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="header-gradient">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
-    <ion-title>HMP News</ion-title>
+    <ion-title>Portal Berita</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-  <div class="welcome-section">
-    <h1>Halo, {{ user?.fullname }}!</h1>
+  <div class="welcome-section ion-margin-bottom">
+    <h1>Halo, <span class="user-name">{{ user?.fullname }}</span></h1>
     <p>Simak berita pilihan hari ini.</p>
   </div>
 
-  <h3>Top News</h3>
+  <div class="section-header">
+    <h3>Berita Teratas</h3>
+    <ion-button fill="clear" size="small" routerLink="/app/news">
+      Lihat Semua <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+    </ion-button>
+  </div>
+
   <div class="highlight-container">
     <div *ngFor="let item of highlights" class="highlight-card" [routerLink]="['/news-detail', item.id]">
-      <img [src]="item.thumbnail_url ? imgUrl + item.thumbnail_url : 'assets/no-img.png'" />
+      <img [src]="item.thumbnail_url ? imgUrl + item.thumbnail_url : 'assets/no-img.jpg'" />
       <div class="card-info">
         <h6>{{ item.title }}</h6>
       </div>
     </div>
+    
+    <div *ngIf="highlights.length === 0" class="empty-highlight">
+      <p><small>Belum ada highlight.</small></p>
+    </div>
   </div>
 
-  <ion-button expand="block" routerLink="/app/news" class="ion-margin-top" fill="outline">
-    Lihat Semua Berita
-    <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
-  </ion-button>
-
-  <h3 class="ion-margin-top">Menu Cepat</h3>
-  <ion-grid>
+  <h3 class="ion-margin-top section-title">Menu Cepat</h3>
+  <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col size="6">
         <div class="menu-box" routerLink="/news-create">
-          <ion-icon name="add-circle" color="success"></ion-icon>
+          <div class="icon-circle green">
+            <ion-icon name="add-circle-outline"></ion-icon>
+          </div>
           <span>Buat Berita</span>
         </div>
       </ion-col>
       <ion-col size="6">
         <div class="menu-box" routerLink="/app/categories">
-          <ion-icon name="grid" color="warning"></ion-icon>
+          <div class="icon-circle orange">
+            <ion-icon name="grid-outline"></ion-icon>
+          </div>
           <span>Kategori</span>
         </div>
       </ion-col>

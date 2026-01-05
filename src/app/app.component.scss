@@ -1,0 +1,78 @@
+/* Header Menu sedikit lebih tinggi */
+.menu-toolbar {
+  --min-height: 80px; /* Tambah tinggi sedikit biar lega */
+  
+  /* Reset padding toolbar agar title bisa mentok */
+  --padding-start: 0;
+  --padding-end: 0;
+
+  ion-title {
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    font-size: 24px; /* Perbesar sedikit biar gagah */
+    color: white;
+    
+    /* FIX: Paksa title mengambil lebar penuh & rata tengah */
+    width: 100%;
+    text-align: center;
+    padding-inline: 0; /* Hapus padding bawaan yang bikin sempit */
+    
+    /* Opsional: Jika masih terpotong di layar sangat kecil */
+    white-space: normal; 
+    overflow: visible;
+  }
+}
+
+/* Label Pemisah (Utama, Kelola) */
+.menu-label {
+  padding-left: 20px;
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ion-color-medium);
+  letter-spacing: 1px;
+}
+
+/* Styling Item Menu */
+.menu-item {
+  --min-height: 50px;
+  margin: 5px 10px; /* Jarak kiri kanan agar melayang */
+  border-radius: 10px; /* Sudut membulat */
+  
+  ion-icon {
+    font-size: 22px;
+    color: var(--ion-color-medium); /* Warna default icon abu-abu */
+    margin-right: 15px;
+  }
+  
+  ion-label {
+    font-weight: 500;
+    color: var(--ion-text-color);
+  }
+
+  /* STATE: SAAT ROUTE AKTIF (SELECTED) */
+  &.selected {
+    --background: rgba(var(--ion-color-primary-rgb), 0.1); /* Background biru muda transparan */
+    
+    ion-icon {
+      color: var(--ion-color-primary); /* Icon jadi biru */
+    }
+    
+    ion-label {
+      font-weight: 700;
+      color: var(--ion-color-primary); /* Teks jadi biru */
+    }
+  }
+}
+
+/* Footer Logout */
+.logout-item {
+  margin: 10px;
+  border-radius: 10px;
+  --background: rgba(var(--ion-color-danger-rgb), 0.05); /* Merah sangat muda */
+  
+  ion-label {
+    font-weight: 600;
+  }
+}

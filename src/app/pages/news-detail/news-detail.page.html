@@ -1,69 +1,89 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="header-gradient">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/app/home"></ion-back-button>
+      <ion-back-button defaultHref="/app/home" color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>Baca Berita</ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="user.id == news.user_id" (click)="confirmDelete()" color="danger">
+      <ion-button *ngIf="user?.id && news?.user_id && user.id == news.user_id" (click)="confirmDelete()" color="light">
         <ion-icon name="trash-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true" class="ion-padding-bottom">
   
-  <div class="image-slider">
-    <img [src]="news.thumbnail_url ? imgUrl + news.thumbnail_url : 'assets/no-img.png'" />
-    <img *ngFor="let img of images" [src]="imgUrl + img" />
+  <div class="image-scroller">
+    <img [src]="news.thumbnail_url ? imgUrl + news.thumbnail_url : 'assets/no-img.jpgs'" class="main-img" />
+    <img *ngFor="let img of images" [src]="imgUrl + img" class="extra-img" />
   </div>
 
-  <div class="ion-padding">
+  <div class="content-wrapper ion-padding">
+    
     <h1 class="news-title">{{ news.title }}</h1>
-    <p class="news-meta">
-      Oleh <b>{{ news.author_name }}</b> • {{ news.created_at | date:'d MMM y HH:mm' }}
-    </p>
+    
+    <div class="meta-row">
+      <span class="author">
+        <ion-icon name="person-circle-outline"></ion-icon> {{ news.author_name }}
+      </span>
+      <span class="date">{{ news.created_at | date:'d MMM y • HH:mm' }}</span>
+    </div>
 
-    <div class="stats-row">
-      <div class="stat-item">
-        <ion-icon name="eye-outline"></ion-icon> {{ news.view_count }} Views
+    <div class="stats-box">
+      <div class="stat-pill">
+        <ion-icon name="eye-outline"></ion-icon> {{ news.view_count }}
       </div>
-      <div class="stat-item">
-        <ion-icon name="star" color="warning"></ion-icon> {{ news.avg_rating || 0 }} / 5.0
+      <div class="stat-pill">
+        <ion-icon name="star" color="warning"></ion-icon> {{ news.avg_rating || 0 | number:'1.1-1' }}
       </div>
     </div>
 
-    <p class="news-desc">{{ news.description }}</p>
-
-    <hr>
-
-    <div class="action-buttons">
-      <ion-button (click)="toggleFavorite()" [color]="isFavorite ? 'danger' : 'medium'" fill="outline">
-        <ion-icon [name]="isFavorite ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
-        {{ isFavorite ? 'Favorit Saya' : 'Tambah Favorit' }}
-      </ion-button>
+    <div class="news-desc">
+      {{ news.description }}
     </div>
 
-    <div class="rating-section ion-text-center">
-      <p>Beri Rating:</p>
-      <ion-icon *ngFor="let i of [1,2,3,4,5]" 
-        [name]="i <= userRating ? 'star' : 'star-outline'" 
-        (click)="rate(i)"
-        class="star-input">
-      </ion-icon>
+    <hr class="divider">
+
+    <ion-button expand="block" (click)="toggleFavorite()" 
+      [color]="isFavorite ? 'danger' : 'medium'" 
+      [fill]="isFavorite ? 'solid' : 'outline'"
+      class="fav-btn">
+      <ion-icon [name]="isFavorite ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
+      {{ isFavorite ? 'Disimpan di Favorit' : 'Simpan ke Favorit' }}
+    </ion-button>
+
+    <div class="rating-section ion-text-center ion-margin-top">
+      <p class="section-label">Beri Rating Berita Ini</p>
+      <div class="stars-wrapper">
+        <ion-icon *ngFor="let i of [1,2,3,4,5]" 
+          [name]="i <= userRating ? 'star' : 'star-outline'" 
+          [class.active]="i <= userRating"
+          (click)="rate(i)">
+        </ion-icon>
+      </div>
     </div>
   </div>
 
-  <div class="comments-section ion-padding">
-    <h3>Komentar ({{ comments.length }})</h3>
+  <div class="comments-section">
+    <div class="section-header ion-padding-horizontal">
+      <h3>Komentar <span class="badge">{{ comments.length }}</span></h3>
+    </div>
 
-    <div *ngFor="let c of comments" class="comment-box">
-      <div class="comment-header">
-        <b>{{ c.fullname }}</b> <small>{{ c.created_at | date:'shortTime' }}</small>
+    <div *ngIf="comments.length === 0" class="no-comments ion-text-center">
+      <p>Belum ada komentar. Jadilah yang pertama!</p>
+    </div>
+
+    <div *ngFor="let c of comments" class="comment-wrap ion-padding-horizontal">
+      <div class="comment-box">
+        <div class="comment-header">
+          <b>{{ c.fullname }}</b> <small>{{ c.created_at | date:'shortTime' }}</small>
+        </div>
+        <p>{{ c.content }}</p>
+        <div class="action-row">
+          <span class="reply-trigger" (click)="setReply(c)">Balas</span>
+        </div>
       </div>
-      <p>{{ c.content }}</p>
-      <div class="reply-btn" (click)="setReply(c)">Balas</div>
 
       <div *ngFor="let r of c.replies" class="reply-box">
         <div class="comment-header">
@@ -76,18 +96,26 @@
 
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar>
-    <div *ngIf="replyTo" class="reply-info ion-padding-horizontal">
-      <small>Membalas: <b>{{ replyTo.fullname }}</b></small>
-      <ion-icon name="close-circle" (click)="cancelReply()"></ion-icon>
+<ion-footer class="ion-no-border">
+  <ion-toolbar class="comment-toolbar">
+    
+    <div *ngIf="replyTo" class="reply-info">
+      <span>Membalas: <b>{{ replyTo.fullname }}</b></span>
+      <ion-icon name="close-circle" (click)="cancelReply()" color="medium"></ion-icon>
     </div>
 
-    <ion-item lines="none">
-      <ion-input [(ngModel)]="newComment" placeholder="Tulis komentar..."></ion-input>
-      <ion-button (click)="sendComment()" slot="end" fill="clear">
+    <div class="input-row">
+      <ion-input 
+        [(ngModel)]="newComment" 
+        placeholder="Tulis komentar..."
+        class="comment-input"
+        (keyup.enter)="sendComment()">
+      </ion-input>
+      
+      <ion-button (click)="sendComment()" fill="clear" color="primary">
         <ion-icon name="send"></ion-icon>
       </ion-button>
-    </ion-item>
+    </div>
+
   </ion-toolbar>
 </ion-footer>

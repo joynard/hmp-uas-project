@@ -5,6 +5,9 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/services/auth';
 
+import { addIcons } from 'ionicons'; // Import addIcons
+import { mailOutline, lockClosedOutline, newspaper } from 'ionicons/icons';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -22,7 +25,9 @@ export class LoginPage implements OnInit {
     private router: Router,
     private toastController: ToastController,
     private zone: NgZone // 2. Inject NgZone di sini
-  ) { }
+  ) {
+    addIcons({ mailOutline, lockClosedOutline, newspaper });
+   }
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {

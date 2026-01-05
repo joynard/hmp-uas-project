@@ -6,6 +6,9 @@ import { AuthService } from '../services/auth';
 import { NewsService } from '../services/news';
 import { environment } from 'src/environments/environment';
 
+import { addIcons } from 'ionicons';
+import { arrowForwardOutline, addCircleOutline, gridOutline } from 'ionicons/icons';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -22,7 +25,7 @@ export class HomePage implements OnInit {
   constructor(
     private authService: AuthService,
     private newsService: NewsService
-  ) {}
+  ) { addIcons({ arrowForwardOutline, addCircleOutline, gridOutline }); }
 
   ionViewWillEnter() {
     this.user = this.authService.getUser();

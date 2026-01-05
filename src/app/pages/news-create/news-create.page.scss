@@ -1,13 +1,36 @@
+/* Wrapper untuk bagian upload agar rapi */
+.upload-section {
+  margin-top: 15px;
+  background: var(--ion-item-background, #fff);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.upload-label {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  
+  ion-icon { font-size: 16px; }
+}
+
+/* Kotak Upload (Dashed Border) */
 .file-input-wrapper {
-  margin-top: 10px;
-  margin-bottom: 5px;
+  position: relative;
+  overflow: hidden;
   
   input[type="file"] {
     width: 100%;
-    padding: 10px;
-    background: #f4f5f8;
+    padding: 15px;
+    background: var(--ion-color-light); /* Background abu-abu muda */
     border-radius: 8px;
-    border: 1px dashed #ccc;
+    border: 2px dashed #ccc; /* Garis putus-putus */
+    outline: none;
+    cursor: pointer;
+    color: var(--ion-text-color);
   }
 }
 
@@ -16,8 +39,7 @@
   color: var(--ion-color-success);
   margin-top: 5px;
   font-style: italic;
-}
-
-ion-textarea {
-  --background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }

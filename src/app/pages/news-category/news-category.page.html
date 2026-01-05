@@ -1,0 +1,40 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="header-gradient">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/categories" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Berita Kategori</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div *ngIf="isLoading" class="empty-state">
+    <ion-spinner color="primary"></ion-spinner>
+    <p class="ion-margin-top">Sedang memuat...</p>
+  </div>
+
+  <div *ngIf="!isLoading && newsList.length === 0" class="empty-state">
+    <ion-icon name="newspaper-outline"></ion-icon>
+    <h3>Tidak Ada Berita</h3>
+    <p>Belum ada artikel di kategori ini.</p>
+  </div>
+
+  <ion-list lines="none" *ngIf="!isLoading && newsList.length > 0">
+    <ion-card *ngFor="let item of newsList" class="news-card" [routerLink]="['/news-detail', item.id]" button>
+      
+      <div class="card-img-wrapper">
+        <img [src]="item.thumbnail_url ? imgUrl + item.thumbnail_url : 'assets/no-img.png'" />
+      </div>
+
+      <ion-card-header>
+        <ion-card-subtitle>
+          {{ item.author_name }} • {{ item.created_at | date:'d MMM y' }}
+        </ion-card-subtitle>
+        <ion-card-title>{{ item.title }}</ion-card-title>
+      </ion-card-header>
+
+    </ion-card>
+  </ion-list>
+
+</ion-content>

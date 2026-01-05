@@ -1,7 +1,7 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="header-gradient">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/app/home"></ion-back-button>
+      <ion-back-button defaultHref="/app/home" color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>Tulis Berita</ion-title>
   </ion-toolbar>
@@ -9,61 +9,75 @@
 
 <ion-content class="ion-padding">
   
-  <ion-list lines="full">
-    
-    <ion-item>
-      <ion-input 
-        label="Judul Berita" 
-        labelPlacement="stacked" 
-        [(ngModel)]="title" 
-        placeholder="Masukkan judul menarik...">
-      </ion-input>
-    </ion-item>
+  <div class="form-wrapper">
+    <ion-list lines="none">
+      
+      <ion-item class="custom-input">
+        <ion-icon name="newspaper-outline" slot="start" color="medium"></ion-icon>
+        <ion-input 
+          label="Judul Berita" 
+          labelPlacement="stacked" 
+          [(ngModel)]="title" 
+          placeholder="Masukkan judul menarik...">
+        </ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-select 
-        label="Pilih Kategori" 
-        labelPlacement="stacked"
-        [(ngModel)]="selectedCategories" 
-        multiple="true" 
-        placeholder="Pilih satu atau lebih">
+      <ion-item class="custom-input">
+        <ion-icon name="grid-outline" slot="start" color="medium"></ion-icon>
+        <ion-select 
+          label="Pilih Kategori" 
+          labelPlacement="stacked"
+          [(ngModel)]="selectedCategories" 
+          multiple="true" 
+          placeholder="Pilih satu atau lebih">
+          <ion-select-option *ngFor="let cat of categories" [value]="cat.id">
+            {{ cat.name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="custom-input">
+        <ion-icon name="document-text-outline" slot="start" color="medium"></ion-icon>
+        <ion-textarea 
+          label="Isi Berita" 
+          labelPlacement="stacked"
+          [(ngModel)]="description" 
+          rows="8"
+          placeholder="Tulis detail berita disini...">
+        </ion-textarea>
+      </ion-item>
+
+      <div class="upload-section ion-margin-bottom">
+        <ion-label class="upload-label">
+          <ion-icon name="image-outline"></ion-icon> Foto Utama (Thumbnail)
+        </ion-label>
         
-        <ion-select-option *ngFor="let cat of categories" [value]="cat.id">
-          {{ cat.name }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-textarea 
-        label="Isi Berita" 
-        labelPlacement="stacked"
-        [(ngModel)]="description" 
-        rows="8"
-        placeholder="Tulis detail berita disini...">
-      </ion-textarea>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">Foto Utama (Thumbnail)</ion-label>
-      <div class="file-input-wrapper">
-        <input type="file" (change)="onMainPhotoSelected($event)" accept="image/*">
+        <div class="file-input-wrapper">
+          <input type="file" (change)="onMainPhotoSelected($event)" accept="image/*">
+        </div>
+        <p class="hint" *ngIf="mainPhoto">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon> 
+          File terpilih: {{ mainPhoto.name }}
+        </p>
       </div>
-      <p class="hint" *ngIf="mainPhoto">File terpilih: {{ mainPhoto.name }}</p>
-    </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Foto Galeri (Min. 4)</ion-label>
-      <div class="file-input-wrapper">
-        <input type="file" multiple (change)="onExtraPhotosSelected($event)" accept="image/*">
+      <div class="upload-section">
+        <ion-label class="upload-label">
+          <ion-icon name="images-outline"></ion-icon> Foto Galeri (Min. 4)
+        </ion-label>
+        
+        <div class="file-input-wrapper">
+          <input type="file" multiple (change)="onExtraPhotosSelected($event)" accept="image/*">
+        </div>
+        <p class="hint" *ngIf="extraPhotos.length > 0">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon> 
+          {{ extraPhotos.length }} foto terpilih
+        </p>
       </div>
-      <p class="hint" *ngIf="extraPhotos.length > 0">{{ extraPhotos.length }} foto terpilih</p>
-    </ion-item>
 
-  </ion-list>
+    </ion-list>
 
-  <div class="ion-padding">
-    <ion-button expand="block" (click)="submit()" size="large">
+    <ion-button expand="block" (click)="submit()" class="btn-submit header-gradient">
       <ion-icon slot="start" name="paper-plane-outline"></ion-icon>
       TERBITKAN BERITA
     </ion-button>
