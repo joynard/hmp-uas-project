@@ -4,24 +4,21 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
-import { isDevMode } from '@angular/core';
-import { provideServiceWorker } from '@angular/service-worker';
+// import { isDevMode } from '@angular/core'; <-- KITA HAPUS INI
+// import { provideServiceWorker } from '@angular/service-worker'; <-- KITA HAPUS INI
 
 import { provideHttpClient } from '@angular/common/http';
 
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(
-      {
+    provideIonicAngular({
       mode: 'ios',
-      animated: true,   
-    }
-    ),
-    provideRouter(routes, withPreloading(PreloadAllModules)), provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          }),
+      animated: true,
+    }),
+    provideRouter(routes, withPreloading(PreloadAllModules)),
+    // provideServiceWorker(...) <-- KITA HAPUS BAGIAN INI AGAR TIDAK CRASH
+    
     provideHttpClient(),
   ],
 });
