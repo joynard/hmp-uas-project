@@ -1,17 +1,54 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { Router } from '@angular/router'; // Hapus RouterLink tak terpakai
-import { NewsService } from 'src/app/services/news'; // Sesuaikan path service kamu
+import { Router } from '@angular/router'; 
+import { NewsService } from 'src/app/services/news'; 
 import { environment } from 'src/environments/environment';
+
+// --- IMPORT STANDALONE KOMPONEN ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonSearchbar, // <--- PENTING UTK HALAMAN SEARCH
+  IonList, 
+  IonItem, 
+  IonLabel, 
+  IonAvatar, 
+  IonImg, 
+  IonText,
+  IonIcon,
+  IonButtons,
+  IonButton,
+  IonMenuButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-news-search',
   templateUrl: './news-search.page.html',
   styleUrls: ['./news-search.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule]
+  // --- MASUKKAN DAFTAR KOMPONEN DI SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonSearchbar, 
+    IonList, 
+    IonItem, 
+    IonLabel, 
+    IonAvatar, 
+    IonImg, 
+    IonText,
+    IonIcon,
+    IonButtons,
+    IonButton,
+    IonMenuButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle
+  ]
 })
 export class NewsSearchPage implements OnInit {
 
@@ -19,9 +56,7 @@ export class NewsSearchPage implements OnInit {
   allNews: any[] = [];
   filteredNews: any[] = [];
   
-  // UBAH JADI FALSE: Agar tampilan awal "Ayo Cari Berita" muncul
   hasSearched: boolean = false; 
-  
   imgUrl = environment.apiKey + 'uploads/';
 
   constructor(
@@ -30,7 +65,6 @@ export class NewsSearchPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Kita load data sekali saja saat awal
     this.loadNews();
   }
 
@@ -38,7 +72,6 @@ export class NewsSearchPage implements OnInit {
     this.newsService.getNews().subscribe({
       next: (res: any) => {
         this.allNews = res;
-        // Kita tidak mengisi filteredNews disini agar layar tetap bersih sebelum search
       },
       error: (err) => {
         console.error(err);
@@ -53,19 +86,15 @@ export class NewsSearchPage implements OnInit {
 
     if (query && query.trim() !== '') {
       this.filteredNews = this.allNews.filter((berita) => {
-        // Search berdasarkan Judul
         return berita.title.toLowerCase().includes(query);
       });
     } else {
-      // Jika dihapus, kosongkan lagi
       this.filteredNews = [];
-      this.hasSearched = false; // Reset state
+      this.hasSearched = false; 
     }
   }
 
   goToDetail(id: any) {
-    // PERBAIKAN PENTING: Gunakan /news-detail (bukan ./news-detail)
-    // Sesuai dengan routes yang kita buat sebelumnya
     this.router.navigate(['/news-detail', id]);
   }
 }

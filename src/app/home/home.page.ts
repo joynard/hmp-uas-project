@@ -1,10 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth';
 import { NewsService } from '../services/news';
 import { environment } from 'src/environments/environment';
+
+// IMPORT KOMPONEN UI YANG BIASA DIPAKAI DI HOME
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonButtons, 
+  IonMenuButton,
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCardContent,
+  IonImg,
+  IonButton,
+  IonIcon,
+  IonGrid, 
+  IonRow, 
+  IonCol,
+  IonRefresher,        // Jika pakai tarik-refresh
+  IonRefresherContent  // Jika pakai tarik-refresh
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { arrowForwardOutline, addCircleOutline, gridOutline } from 'ionicons/icons';
@@ -14,7 +36,28 @@ import { arrowForwardOutline, addCircleOutline, gridOutline } from 'ionicons/ico
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterLink],
+  // --- MASUKKAN DAFTAR KOMPONEN DI ATAS KE SINI ---
+  imports: [
+    CommonModule, 
+    RouterLink,
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonButtons, 
+    IonMenuButton,
+    IonCard,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonCardContent,
+    IonImg,
+    IonButton,
+    IonIcon,
+    IonRefresher,
+    IonRefresherContent,
+    IonGrid, IonRow, IonCol,
+  ],
 })
 export class HomePage implements OnInit {
   
@@ -35,9 +78,7 @@ export class HomePage implements OnInit {
   ngOnInit() {}
 
   loadHighlights() {
-    // Ambil berita, tapi nanti di HTML kita batasi tampilannya (misal cuma 3-5)
     this.newsService.getNews().subscribe((res: any) => {
-      // Ambil 5 berita terbaru saja untuk highlight
       this.highlights = res.slice(0, 5);
     });
   }

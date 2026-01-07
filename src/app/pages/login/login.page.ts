@@ -1,11 +1,26 @@
-import { Component, OnInit, NgZone } from '@angular/core'; // 1. Tambah NgZone
+import { Component, OnInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/services/auth';
 
-import { addIcons } from 'ionicons'; // Import addIcons
+// --- IMPORT STANDALONE KOMPONEN ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonList, 
+  IonItem, 
+  IonInput,     // <--- WAJIB ADA (Supaya bisa ngetik)
+  IonButton, 
+  IonIcon, 
+  IonText,
+  IonImg
+} from '@ionic/angular/standalone';
+
+import { addIcons } from 'ionicons';
 import { mailOutline, lockClosedOutline, newspaper } from 'ionicons/icons';
 
 @Component({
@@ -13,7 +28,23 @@ import { mailOutline, lockClosedOutline, newspaper } from 'ionicons/icons';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterLink]
+  // --- MASUKKAN DAFTAR KOMPONEN DI SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterLink,
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonList, 
+    IonItem, 
+    IonInput, 
+    IonButton, 
+    IonIcon, 
+    IonText,
+    IonImg
+  ]
 })
 export class LoginPage implements OnInit {
   
@@ -24,7 +55,7 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private toastController: ToastController,
-    private zone: NgZone // 2. Inject NgZone di sini
+    private zone: NgZone 
   ) {
     addIcons({ mailOutline, lockClosedOutline, newspaper });
    }
@@ -47,8 +78,6 @@ export class LoginPage implements OnInit {
           this.authService.saveSession(response.data);
           this.presentToast('Selamat datang, ' + response.data.fullname);
           
-          // 3. SOLUSI: Bungkus navigasi dengan NgZone.run()
-          // Ini memaksa Angular untuk segera update tampilan tanpa menunggu refresh
           this.zone.run(() => {
             this.router.navigateByUrl('/app/home');
           });

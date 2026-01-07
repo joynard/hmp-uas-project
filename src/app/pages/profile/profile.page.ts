@@ -1,10 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { ToastController, LoadingController } from '@ionic/angular';
+
+// --- IMPORT STANDALONE COMPONENTS ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonItem, 
+  IonInput,    // <--- WAJIB ADA (Untuk Edit Nama)
+  IonButton, 
+  IonIcon, 
+  IonLabel,
+  IonAvatar,   // Untuk Foto Profil
+  IonList,
+  IonToggle,   // Untuk Switch Dark Mode
+  IonImg,     // Untuk menampilkan gambar preview
+  IonButtons, IonMenuButton
+} from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
 import { camera, logOutOutline, moon, personOutline } from 'ionicons/icons';
 
@@ -13,7 +32,26 @@ import { camera, logOutOutline, moon, personOutline } from 'ionicons/icons';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  // --- MASUKKAN DAFTAR KOMPONEN KE SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule,
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonItem, 
+    IonInput, 
+    IonButton, 
+    IonIcon, 
+    IonLabel,
+    IonAvatar,
+    IonList,
+    IonToggle,
+    IonImg,
+    IonButtons, 
+    IonMenuButton
+  ]
 })
 export class ProfilePage implements OnInit {
 
@@ -36,35 +74,31 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit() {
-    // 1. Load Data User
     this.user = this.authService.getUser();
     if(this.user) {
       this.editName = this.user.fullname;
     }
 
-    // 2. Load Theme State
     this.isDark = this.authService.isDarkMode();
     this.currentTheme = localStorage.getItem('theme_color') || 'blue';
   }
 
-  // Handle Pilih File Foto
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
       
-      // Preview gambar secara lokal sebelum upload (UX trick)
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.user.avatar = null; // Hack utk trigger change
-        // Kita timpa tampilan sementara (belum kesimpan di server)
-        // Note: Ini hanya preview, upload terjadi saat tombol Simpan ditekan
+        // Kita update avatar object lokal untuk preview
+        // Pastikan di HTML kamu pakai [src]="selectedFile ? previewUrl : serverUrl"
+        // atau cara hacky ini (kurang ideal tapi jalan):
+        this.user.avatar = null; 
       };
       reader.readAsDataURL(file);
     }
   }
 
-  // Simpan Profil (Nama & Foto)
   async saveProfile() {
     const loading = await this.loadingCtrl.create({ message: 'Menyimpan...' });
     await loading.present();
@@ -75,9 +109,7 @@ export class ProfilePage implements OnInit {
         if(res.result === 'success') {
           this.authService.saveSession(res.data);
           this.user = res.data;
-          
-          this.selectedFile = null; // Reset file agar tidak di-upload ulang
-
+          this.selectedFile = null; 
           this.showToast('Profil berhasil diperbarui!');
         } else {
           this.showToast('Gagal update.');
@@ -90,13 +122,11 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  // Ganti Tema Warna
   changeTheme(color: string) {
     this.currentTheme = color;
     this.authService.setTheme(color);
   }
 
-  // Toggle Dark Mode
   toggleDark(event: any) {
     this.authService.toggleDarkMode(event.detail.checked);
   }

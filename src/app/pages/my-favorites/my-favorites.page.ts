@@ -1,13 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController, LoadingController } from '@ionic/angular';
+import { ToastController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { NewsService } from 'src/app/services/news';
 import { AuthService } from 'src/app/services/auth';
 import { environment } from 'src/environments/environment';
 
-// Import Icon untuk tombol hapus (sampah)
+// --- IMPORT STANDALONE KOMPONEN ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonList, 
+  IonItem, 
+  IonLabel, 
+  IonCard, 
+  IonCardHeader, 
+  IonCardTitle, 
+  IonCardSubtitle, 
+  IonImg, 
+  IonButton,     // Tombol Hapus
+  IonIcon,       // Ikon Sampah
+  IonText,
+  IonThumbnail,  // Jika tampilan list pakai thumbnail kecil
+  IonButtons, IonMenuButton
+} from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
 import { trashOutline, newspaperOutline } from 'ionicons/icons';
 
@@ -16,7 +36,28 @@ import { trashOutline, newspaperOutline } from 'ionicons/icons';
   templateUrl: './my-favorites.page.html',
   styleUrls: ['./my-favorites.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  // --- MASUKKAN DAFTAR KOMPONEN DI SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule,
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonList, 
+    IonItem, 
+    IonLabel, 
+    IonCard, 
+    IonCardHeader, 
+    IonCardTitle, 
+    IonCardSubtitle, 
+    IonImg, 
+    IonButton, 
+    IonIcon, 
+    IonText,
+    IonThumbnail,
+    IonButtons, IonMenuButton
+  ]
 })
 export class MyFavoritesPage implements OnInit {
 
@@ -31,7 +72,6 @@ export class MyFavoritesPage implements OnInit {
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController
   ) {
-    // Registrasi icon
     addIcons({ trashOutline, newspaperOutline });
   }
 
@@ -39,7 +79,6 @@ export class MyFavoritesPage implements OnInit {
     this.user = this.authService.getUser();
   }
 
-  // Gunakan ionViewWillEnter agar data selalu refresh saat Tab dibuka
   ionViewWillEnter() {
     this.loadFavorites();
   }
@@ -47,7 +86,6 @@ export class MyFavoritesPage implements OnInit {
   loadFavorites() {
     this.newsService.getMyFavorites(this.user.id).subscribe({
       next: (res: any) => {
-        // Asumsi API mengembalikan array berita
         this.favorites = res;
       },
       error: (err) => {
@@ -60,9 +98,7 @@ export class MyFavoritesPage implements OnInit {
     this.router.navigate(['/news-detail', id]);
   }
 
-  // Fitur Hapus Favorit langsung dari List
   async removeFavorite(event: any, news_id: number) {
-    // Mencegah klik tembus ke Card (agar tidak masuk ke halaman detail)
     event.stopPropagation();
 
     const loading = await this.loadingCtrl.create({ message: 'Menghapus...' });
@@ -73,7 +109,7 @@ export class MyFavoritesPage implements OnInit {
         loading.dismiss();
         if (res.result === 'success') {
           this.showToast('Berita dihapus dari favorit');
-          this.loadFavorites(); // Refresh list otomatis
+          this.loadFavorites(); 
         }
       },
       error: () => {

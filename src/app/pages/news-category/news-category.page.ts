@@ -1,12 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NewsService } from 'src/app/services/news'; 
-
-// 1. IMPORT ENVIRONMENT
 import { environment } from 'src/environments/environment';
+
+// --- IMPORT STANDALONE KOMPONEN ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonButtons, 
+  IonBackButton, // Tombol Back di pojok kiri atas
+  IonList, 
+  IonItem, 
+  IonLabel, 
+  IonCard,       // Card Berita
+  IonCardHeader, 
+  IonCardTitle, 
+  IonCardSubtitle, 
+  IonCardContent, 
+  IonImg, 
+  IonSpinner,    // Loading Spinner
+  IonText,
+  IonIcon
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { newspaperOutline } from 'ionicons/icons';
@@ -16,7 +35,30 @@ import { newspaperOutline } from 'ionicons/icons';
   templateUrl: './news-category.page.html',
   styleUrls: ['./news-category.page.scss'], 
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterLink]
+  // --- MASUKKAN DAFTAR KOMPONEN DI SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterLink,
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonButtons, 
+    IonBackButton, 
+    IonList, 
+    IonItem, 
+    IonLabel, 
+    IonCard, 
+    IonCardHeader, 
+    IonCardTitle, 
+    IonCardSubtitle, 
+    IonCardContent, 
+    IonImg, 
+    IonSpinner, 
+    IonText,
+    IonIcon
+  ]
 })
 export class NewsCategoryPage implements OnInit {
 
@@ -24,8 +66,7 @@ export class NewsCategoryPage implements OnInit {
   newsList: any[] = [];
   isLoading: boolean = true;
   
-  // 2. DEFINISIKAN imgUrl DARI ENVIRONMENT
-  imgUrl = environment.imgUrl;
+  imgUrl = environment.apiKey + 'uploads/'; // Pastikan path ini benar sesuai service lain
 
   constructor(
     private route: ActivatedRoute,

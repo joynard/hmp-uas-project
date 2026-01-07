@@ -1,11 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController, AlertController, NavController } from '@ionic/angular';
+import { ToastController, AlertController, NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { NewsService } from 'src/app/services/news';
 import { AuthService } from 'src/app/services/auth';
 import { environment } from 'src/environments/environment';
+
+// --- IMPORT STANDALONE KOMPONEN ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonButtons, 
+  IonBackButton, // Tombol Kembali di Header
+  IonButton, 
+  IonIcon, 
+  IonImg, 
+  IonText, 
+  IonBadge,      // Badge Kategori
+  IonCard, 
+  IonCardContent, 
+  IonList, 
+  IonItem, 
+  IonAvatar, 
+  IonLabel, 
+  IonFooter,     // Footer Input Komen
+  IonInput,      // Input Komen
+  IonNote
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { 
@@ -26,7 +50,31 @@ import {
   templateUrl: './news-detail.page.html',
   styleUrls: ['./news-detail.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  // --- MASUKKAN DAFTAR KOMPONEN DI SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonButtons, 
+    IonBackButton, 
+    IonButton, 
+    IonIcon, 
+    IonImg, 
+    IonText, 
+    IonBadge, 
+    IonCard, 
+    IonCardContent, 
+    IonList, 
+    IonItem, 
+    IonAvatar, 
+    IonLabel, 
+    IonFooter, 
+    IonInput, 
+    IonNote
+  ]
 })
 export class NewsDetailPage implements OnInit {
 
@@ -35,13 +83,11 @@ export class NewsDetailPage implements OnInit {
   images: string[] = [];
   comments: any[] = [];
   
-  // State User
   user: any = {};
   isFavorite: boolean = false;
   
-  // State Input
   newComment: string = '';
-  replyTo: any = null; // Menyimpan objek komentar yang sedang dibalas
+  replyTo: any = null; 
   userRating: number = 0;
 
   imgUrl = environment.apiKey + 'uploads/';
@@ -70,7 +116,6 @@ export class NewsDetailPage implements OnInit {
 
   ngOnInit() {
     this.user = this.authService.getUser();
-    // Ambil ID dari URL
     this.newsId = Number(this.route.snapshot.paramMap.get('id'));
     
     if(this.newsId) {
@@ -92,12 +137,9 @@ export class NewsDetailPage implements OnInit {
 
   loadComments() {
     this.newsService.getComments(this.newsId).subscribe((res: any) => {
-      // Filter hanya komentar induk (parent_id null atau 0)
       const parents = res.filter((c: any) => !c.parent_id);
       
-      // Masukkan balasan (replies) ke induknya masing-masing
       parents.forEach((p: any) => {
-        // Gunakan '==' (bukan ===) agar angka dan string cocok
         p.replies = res.filter((c: any) => c.parent_id == p.id);
       });
 
@@ -108,10 +150,8 @@ export class NewsDetailPage implements OnInit {
   checkMyRating() {
     this.newsService.getMyRating(this.newsId, this.user.id).subscribe((res: any) => {
       if (res.result === 'success') {
-        // Update tampilan bintang sesuai rating user di database
         this.userRating = parseInt(res.score);
       } else {
-        // Jika belum rate, set 0
         this.userRating = 0;
       }
     });
@@ -119,13 +159,10 @@ export class NewsDetailPage implements OnInit {
 
   checkFavoriteStatus() {
     this.newsService.getMyFavorites(this.user.id).subscribe((res: any) => {
-      // Cek apakah berita ini ada di daftar favorit user
       const found = res.find((f: any) => f.id == this.newsId);
-      this.isFavorite = !!found; // true jika found, false jika undefined
+      this.isFavorite = !!found; 
     });
   }
-
-  // --- ACTIONS ---
 
   async toggleFavorite() {
     this.newsService.toggleFavorite(this.newsId, this.user.id).subscribe((res: any) => {
@@ -145,25 +182,21 @@ export class NewsDetailPage implements OnInit {
       .subscribe((res: any) => {
         if(res.result === 'success') {
           this.newComment = '';
-          this.replyTo = null; // Reset mode reply
-          this.loadComments(); // Refresh komentar
+          this.replyTo = null; 
+          this.loadComments(); 
           this.showToast('Komentar terkirim');
         }
       });
   }
 
-  // Set mode reply
   setReply(comment: any) {
     this.replyTo = comment;
-    // Otomatis scroll ke input box (opsional)
   }
 
-  // Batal reply
   cancelReply() {
     this.replyTo = null;
   }
 
-  // Beri Rating (Klik Bintang)
   rate(score: number) {
     this.userRating = score;
     this.newsService.addRating(this.newsId, this.user.id, score).subscribe(() => {
@@ -172,7 +205,6 @@ export class NewsDetailPage implements OnInit {
     });
   }
 
-  // Hapus Berita (Hanya Pembuat)
   async confirmDelete() {
     const alert = await this.alertCtrl.create({
       header: 'Hapus Berita?',

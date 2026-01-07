@@ -1,9 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth';
+import { ToastController } from '@ionic/angular'; // Service tetap dari @ionic/angular
+
+// --- IMPORT STANDALONE COMPONENTS ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonItem, 
+  IonInput,     // <--- WAJIB ADA (Solusi Error setFocus)
+  IonButton, 
+  IonIcon, 
+  IonLabel,
+  IonText,      // Untuk pesan error kecil jika ada
+  IonButtons, IonBackButton, IonList
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { personOutline, mailOutline, lockClosedOutline } from 'ionicons/icons';
@@ -13,7 +28,22 @@ import { personOutline, mailOutline, lockClosedOutline } from 'ionicons/icons';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  // --- MASUKKAN DAFTAR KOMPONEN KE SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule,
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonItem, 
+    IonInput, 
+    IonButton, 
+    IonIcon, 
+    IonLabel,
+    IonText,
+    IonButtons, IonBackButton, IonList
+  ]
 })
 export class RegisterPage implements OnInit {
 
@@ -56,7 +86,6 @@ export class RegisterPage implements OnInit {
       return;
     }
 
-    // UPDATE: Panggil service dengan parameter langsung (Bukan FormData)
     this.authService.register(this.fullname, this.email, this.password).subscribe({
       next: (response: any) => {
         if (response.result === 'success') {

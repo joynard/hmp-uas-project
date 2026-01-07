@@ -1,8 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController, NavController } from '@ionic/angular';
+import { ToastController, NavController } from '@ionic/angular';
 import { CategoryService } from 'src/app/services/category';
+
+// --- IMPORT STANDALONE KOMPONEN ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonButtons, 
+  IonBackButton, // Tombol Kembali
+  IonItem, 
+  IonInput,      // Input Nama Kategori
+  IonButton, 
+  IonIcon,
+  IonList
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { pricetagOutline } from 'ionicons/icons';
@@ -12,7 +27,22 @@ import { pricetagOutline } from 'ionicons/icons';
   templateUrl: './category-create.page.html',
   styleUrls: ['./category-create.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  // --- MASUKKAN DAFTAR KOMPONEN DI SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule,
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonButtons, 
+    IonBackButton, 
+    IonItem, 
+    IonInput, 
+    IonButton, 
+    IonIcon,
+    IonList
+  ]
 })
 export class CategoryCreatePage implements OnInit {
 
@@ -21,7 +51,7 @@ export class CategoryCreatePage implements OnInit {
   constructor(
     private categoryService: CategoryService,
     private toastCtrl: ToastController,
-    private navCtrl: NavController // Untuk tombol Back
+    private navCtrl: NavController
   ) { addIcons({ pricetagOutline });}
 
   ngOnInit() {

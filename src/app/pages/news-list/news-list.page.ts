@@ -1,11 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
 import { NewsService } from 'src/app/services/news';
 import { AuthService } from 'src/app/services/auth';
 import { environment } from 'src/environments/environment';
+
+// --- IMPORT STANDALONE KOMPONEN ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonButtons, 
+  IonButton, 
+  IonIcon, 
+  IonList, 
+  IonItem, 
+  IonLabel,
+  IonCard,          // <--- PENTING UTK CARD BERITA
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCardContent,
+  IonImg,
+  IonBadge,
+  IonRefresher,
+  IonRefresherContent,
+  IonBackButton, IonSpinner
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { logOutOutline, star, chatbubbleOutline } from 'ionicons/icons';
@@ -15,27 +38,49 @@ import { logOutOutline, star, chatbubbleOutline } from 'ionicons/icons';
   templateUrl: './news-list.page.html',
   styleUrls: ['./news-list.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterLink]
+  // --- MASUKKAN DAFTAR KOMPONEN DI SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterLink,
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonButtons, 
+    IonButton, 
+    IonIcon, 
+    IonList, 
+    IonItem, 
+    IonLabel,
+    IonCard,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonCardContent,
+    IonImg,
+    IonBadge,
+    IonRefresher,
+    IonRefresherContent,
+    IonBackButton, IonSpinner
+  ]
 })
 export class NewsListPage implements OnInit {
 
   newsList: any[] = [];
   userParams: any;
-  imgUrl = environment.apiKey + 'uploads/'; // Base URL untuk gambar
+  imgUrl = environment.apiKey + 'uploads/'; 
 
   constructor(
     private newsService: NewsService,
     private authService: AuthService,
     private router: Router
   ) { 
-    // Ambil data user yang sedang login buat ditampilkan namanya
     this.userParams = this.authService.getUser();
     addIcons({ logOutOutline, star, chatbubbleOutline });
   }
 
-  ngOnInit() {
-    // Kita pakai ionViewWillEnter biar refresh tiap kali masuk
-  }
+  ngOnInit() { }
 
   ionViewWillEnter() {
     this.loadNews();
@@ -44,7 +89,6 @@ export class NewsListPage implements OnInit {
   loadNews() {
     this.newsService.getNews().subscribe({
       next: (res: any) => {
-        // Karena format JSON kita array of objects
         this.newsList = res;
       },
       error: (err) => {
@@ -53,7 +97,6 @@ export class NewsListPage implements OnInit {
     });
   }
 
-  // Fungsi Logout
   logout() {
     this.authService.logout();
     this.router.navigateByUrl('/login');

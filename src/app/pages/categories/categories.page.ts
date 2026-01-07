@@ -1,10 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, LoadingController } from '@ionic/angular';
-
+import { LoadingController } from '@ionic/angular'; // Service tetap dari sini
 import { CategoryService } from 'src/app/services/category'; 
 import { RouterLink } from '@angular/router';
+
+// --- IMPORT STANDALONE KOMPONEN ---
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonList, 
+  IonItem, 
+  IonLabel, 
+  IonRefresher,        // Tarik untuk Refresh
+  IonRefresherContent, // Animasi Refresh
+  IonFab,              // Tombol Bulat Melayang (Add)
+  IonFabButton, 
+  IonIcon, 
+  IonButtons,
+  IonMenuButton,
+  IonText
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { add, pricetagOutline, pricetagsOutline, chevronDownCircleOutline } from 'ionicons/icons';
@@ -14,7 +32,27 @@ import { add, pricetagOutline, pricetagsOutline, chevronDownCircleOutline } from
   templateUrl: './categories.page.html',
   styleUrls: ['./categories.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterLink]
+  // --- MASUKKAN DAFTAR KOMPONEN DI SINI ---
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterLink,
+    IonContent, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonList, 
+    IonItem, 
+    IonLabel, 
+    IonRefresher, 
+    IonRefresherContent, 
+    IonFab, 
+    IonFabButton, 
+    IonIcon, 
+    IonButtons,
+    IonMenuButton,
+    IonText
+  ]
 })
 export class CategoriesPage implements OnInit {
 
@@ -34,16 +72,13 @@ export class CategoriesPage implements OnInit {
     this.loadData(false); 
   }
 
-  // Jalan saat user menarik layar (Pull to Refresh)
   handleRefresh(event: any) {
     this.loadData(true, event);
   }
 
-  // Logic Gabungan
   async loadData(isRefresher: boolean = false, event?: any) {
     let loading: any;
 
-    // Jika BUKAN refresher, tampilkan Loading Spinner Besar
     if (!isRefresher) {
       loading = await this.loadingCtrl.create({ message: 'Memuat kategori...' });
       await loading.present();
@@ -53,11 +88,10 @@ export class CategoriesPage implements OnInit {
       next: (res: any) => {
         this.categories = res;
         
-        // Matikan loading sesuai jenisnya
         if (isRefresher && event) {
-          event.target.complete(); // Matikan animasi tarik
+          event.target.complete(); 
         } else if (loading) {
-          loading.dismiss(); // Matikan loading fullscreen
+          loading.dismiss(); 
         }
       },
       error: (err) => {
