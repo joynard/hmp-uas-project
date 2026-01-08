@@ -9,6 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
 
   themeColor = new BehaviorSubject<string>('blue');
+  public justLoggedIn: boolean = false;
 
   constructor(private http: HttpClient) {
     this.loadTheme();

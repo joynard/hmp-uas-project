@@ -24,8 +24,9 @@ import {
   IonGrid, 
   IonRow, 
   IonCol,
-  IonRefresher,        // Jika pakai tarik-refresh
-  IonRefresherContent  // Jika pakai tarik-refresh
+  IonRefresher,        
+  IonRefresherContent,
+  IonToast
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -56,7 +57,7 @@ import { arrowForwardOutline, addCircleOutline, gridOutline } from 'ionicons/ico
     IonIcon,
     IonRefresher,
     IonRefresherContent,
-    IonGrid, IonRow, IonCol,
+    IonGrid, IonRow, IonCol, IonToast
   ],
 })
 export class HomePage implements OnInit {
@@ -64,6 +65,9 @@ export class HomePage implements OnInit {
   user: any = {};
   highlights: any[] = [];
   imgUrl = environment.apiKey + 'uploads/';
+
+  isToastOpen = false;
+  toastMessage = '';
 
   constructor(
     private authService: AuthService,
@@ -73,6 +77,13 @@ export class HomePage implements OnInit {
   ionViewWillEnter() {
     this.user = this.authService.getUser();
     this.loadHighlights();
+
+    if (this.authService.justLoggedIn) {
+      this.toastMessage = 'Selamat datang, ' + (this.user?.fullname || 'User');
+      this.isToastOpen = true; // open toast
+      
+      this.authService.justLoggedIn = false; // reset flag
+    }
   }
 
   ngOnInit() {}

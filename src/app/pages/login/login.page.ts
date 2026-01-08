@@ -85,7 +85,7 @@ export class LoginPage implements OnInit {
         if (response.result === 'success') {
           this.authService.saveSession(response.data);
           
-          this.setOpen(true, 'Selamat datang, ' + response.data.fullname);
+          this.authService.justLoggedIn = true;
           
           this.zone.run(() => {
             this.router.navigateByUrl('/app/home');
