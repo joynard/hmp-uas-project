@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { LoadingController } from '@ionic/angular'; 
+// Import Service Controller (Manual)
+import { ToastController, LoadingController } from '@ionic/angular'; 
 
 // --- IMPORT STANDALONE COMPONENTS ---
 import { 
@@ -16,16 +17,13 @@ import {
   IonInput,    
   IonButton, 
   IonIcon, 
-  IonLabel,
-  IonAvatar,   
+  IonLabel,  
   IonList,
-  IonToggle,   
-  IonImg,     
+  IonToggle,     
   IonButtons, 
   IonMenuButton,
   IonRefresher,
-  IonRefresherContent,
-  IonToast 
+  IonRefresherContent
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -53,55 +51,54 @@ import { camera, logOutOutline, moon, personOutline, chevronDownCircleOutline } 
     IonButtons, 
     IonMenuButton,
     IonRefresher,
-    IonRefresherContent,
-    IonToast 
+    IonRefresherContent
   ]
 })
 export class ProfilePage implements OnInit {
 
-  user: any = {};
+  user: any = null; // Default null agar di HTML bisa kita cek *ngIf
   editName: string = '';
   selectedFile: File | null = null;
   imgUrl = environment.apiKey + 'uploads/';
 
-  // theme state
   isDark: boolean = false;
   currentTheme: string = 'blue';
 
   public refreshIcon = chevronDownCircleOutline;
 
-  isToastOpen = false;
-  toastMessage = '';
-
   constructor(
     private authService: AuthService,
     private router: Router,
-    private loadingCtrl: LoadingController,
-    private cdr: ChangeDetectorRef 
+    private loadingCtrl: LoadingController, // Inject Loading
+    private toastCtrl: ToastController,     // Inject Toast
+    private cdr: ChangeDetectorRef          // Inject CDR (Obat Refresh)
   ) { 
     addIcons({ camera, logOutOutline, moon, personOutline, chevronDownCircleOutline });
   }
 
   ngOnInit() {
-    this.loadUserData();
     this.isDark = this.authService.isDarkMode();
     this.currentTheme = localStorage.getItem('theme_color') || 'blue';
   }
 
+  // Dipanggil SETIAP KALI halaman akan tampil (bukan cuma sekali saat init)
   ionViewWillEnter() {
-    this.loadUserData(); // refresh data
+    this.loadUserData();
   }
 
   loadUserData() {
+    // 1. Ambil data
     this.user = this.authService.getUser();
     
+    // 2. Isi form
     if(this.user) {
       this.editName = this.user.fullname;
     } else {
-      this.router.navigateByUrl('/login'); // else user kosong suru balik ke login
+      this.router.navigateByUrl('/login');
     }
     
-    // refresh
+    // 3. OBAT AMPUH: Paksa update tampilan DETIK INI JUGA
+    // Ini yang memperbaiki masalah "harus refresh dulu baru muncul"
     this.cdr.detectChanges(); 
   }
 
@@ -109,7 +106,6 @@ export class ProfilePage implements OnInit {
     setTimeout(() => {
       this.loadUserData();
       event.target.complete();
-      this.cdr.detectChanges();
     }, 1000);
   }
 
@@ -121,25 +117,33 @@ export class ProfilePage implements OnInit {
   }
 
   async saveProfile() {
+    // Validasi
     if (!this.editName) {
       this.showToast('Nama tidak boleh kosong!');
       return;
     }
 
-    const loading = await this.loadingCtrl.create({ message: 'Menyimpan...' });
+    // 1. TAMPILKAN LOADING DULUAN (Supaya user tau tombolnya bereaksi)
+    const loading = await this.loadingCtrl.create({ 
+      message: 'Menyimpan...',
+      spinner: 'crescent'
+    });
     await loading.present();
 
+    // 2. Kirim ke Server
     this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
       next: async (res: any) => {
-        await loading.dismiss(); 
+        await loading.dismiss(); // Tutup loading
         
         if(res.result === 'success') {
+          // Update Session Lokal
           this.authService.saveSession(res.data);
           this.user = res.data; 
           
           this.selectedFile = null; 
           this.showToast('Profil berhasil diperbarui!');
           
+          // Update Tampilan Lagi
           this.cdr.detectChanges(); 
         } else {
           this.showToast('Gagal update: ' + res.message);
@@ -148,9 +152,21 @@ export class ProfilePage implements OnInit {
       error: async (err) => {
         await loading.dismiss();
         console.error(err);
-        this.showToast('Gagal koneksi server.');
+        this.showToast('Gagal koneksi ke server.');
       }
     });
+  }
+
+  // Helper untuk menampilkan Toast Manual
+  async showToast(msg: string) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 2000,
+      position: 'bottom',
+      color: 'dark',
+      buttons: [{ text: 'OK', role: 'cancel' }]
+    });
+    await toast.present();
   }
 
   changeTheme(color: string) {
@@ -165,11 +181,5 @@ export class ProfilePage implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigateByUrl('/login');
-  }
-
-  showToast(msg: string) {
-    this.toastMessage = msg;
-    this.isToastOpen = true;
-    this.cdr.detectChanges(); // show pop up
   }
 }

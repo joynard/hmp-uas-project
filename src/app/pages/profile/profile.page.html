@@ -24,11 +24,16 @@
   </ion-refresher>
 
   <div class="profile-header ion-text-center">
+    
     <div class="avatar-wrapper" (click)="fileInput.click()" *ngIf="user">
       <img [src]="user.avatar ? imgUrl + user.avatar : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
       <div class="edit-icon">
         <ion-icon name="camera"></ion-icon>
       </div>
+    </div>
+
+    <div class="avatar-wrapper" *ngIf="!user">
+      <img src="assets/no-img.png" style="opacity: 0.5" />
     </div>
     
     <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
@@ -75,12 +80,4 @@
     </div>
   </div>
 
-  <ion-toast
-    [isOpen]="isToastOpen"
-    [message]="toastMessage"
-    [duration]="2000"
-    position="bottom"
-    (didDismiss)="isToastOpen = false"
-  ></ion-toast>
-
-</ion-content>
+  </ion-content>
