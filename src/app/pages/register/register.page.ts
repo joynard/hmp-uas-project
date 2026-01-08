@@ -40,8 +40,6 @@ import { personOutline, mailOutline, lockClosedOutline } from 'ionicons/icons';
     IonInput, 
     IonButton, 
     IonIcon, 
-    IonLabel,
-    IonText,
     IonButtons, IonBackButton, IonList, IonToast
   ]
 })
