@@ -106,14 +106,14 @@ export class MyFavoritesPage implements OnInit {
 
     this.newsService.toggleFavorite(news_id, this.user.id).subscribe({
       next: (res: any) => {
-        loading.dismiss();
+        //loading.dismiss();
         if (res.result === 'success') {
           this.showToast('Berita dihapus dari favorit');
           this.loadFavorites(); 
         }
       },
       error: () => {
-        loading.dismiss();
+        //loading.dismiss();
         this.showToast('Gagal menghapus');
       }
     });
