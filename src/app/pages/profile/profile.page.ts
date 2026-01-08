@@ -59,7 +59,7 @@ export class ProfilePage implements OnInit {
   }
 
   loadUserData() {
-    this.user = this.authService.getUser();
+    this.user = this.authService.getUser(); // get data session dari local storage user
     if(this.user) {
       this.editName = this.user.fullname;
     } 
