@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { ToastController, LoadingController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular'; 
 
 // --- IMPORT STANDALONE COMPONENTS ---
 import { 
@@ -24,7 +24,8 @@ import {
   IonButtons, 
   IonMenuButton,
   IonRefresher,
-  IonRefresherContent
+  IonRefresherContent,
+  IonToast 
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -52,7 +53,8 @@ import { camera, logOutOutline, moon, personOutline, chevronDownCircleOutline } 
     IonButtons, 
     IonMenuButton,
     IonRefresher,
-    IonRefresherContent  
+    IonRefresherContent,
+    IonToast 
   ]
 })
 export class ProfilePage implements OnInit {
@@ -62,16 +64,18 @@ export class ProfilePage implements OnInit {
   selectedFile: File | null = null;
   imgUrl = environment.apiKey + 'uploads/';
 
-  // theme State
+  // theme state
   isDark: boolean = false;
   currentTheme: string = 'blue';
 
   public refreshIcon = chevronDownCircleOutline;
 
+  isToastOpen = false;
+  toastMessage = '';
+
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private cdr: ChangeDetectorRef 
   ) { 
@@ -84,15 +88,23 @@ export class ProfilePage implements OnInit {
     this.currentTheme = localStorage.getItem('theme_color') || 'blue';
   }
 
-  // load data user dari storage --> localstorage implementation
-  loadUserData() {
-    this.user = this.authService.getUser();
-    if(this.user) {
-      this.editName = this.user.fullname;
-    }
+  ionViewWillEnter() {
+    this.loadUserData(); // refresh data
   }
 
-  // handle refresh
+  loadUserData() {
+    this.user = this.authService.getUser();
+    
+    if(this.user) {
+      this.editName = this.user.fullname;
+    } else {
+      this.router.navigateByUrl('/login'); // else user kosong suru balik ke login
+    }
+    
+    // refresh
+    this.cdr.detectChanges(); 
+  }
+
   handleRefresh(event: any) {
     setTimeout(() => {
       this.loadUserData();
@@ -109,29 +121,26 @@ export class ProfilePage implements OnInit {
   }
 
   async saveProfile() {
-    // validasi input
     if (!this.editName) {
       this.showToast('Nama tidak boleh kosong!');
       return;
     }
 
-    // display loading
     const loading = await this.loadingCtrl.create({ message: 'Menyimpan...' });
     await loading.present();
 
     this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
       next: async (res: any) => {
-        await loading.dismiss(); // tutup loading
+        await loading.dismiss(); 
         
         if(res.result === 'success') {
-          // update data session di device user
           this.authService.saveSession(res.data);
-          this.user = res.data; // update tampilan
+          this.user = res.data; 
           
-          this.selectedFile = null; // reset file input
+          this.selectedFile = null; 
           this.showToast('Profil berhasil diperbarui!');
           
-          this.cdr.detectChanges(); // refresh 
+          this.cdr.detectChanges(); 
         } else {
           this.showToast('Gagal update: ' + res.message);
         }
@@ -158,8 +167,9 @@ export class ProfilePage implements OnInit {
     this.router.navigateByUrl('/login');
   }
 
-  async showToast(msg: string) {
-    const toast = await this.toastCtrl.create({ message: msg, duration: 2000 });
-    toast.present();
+  showToast(msg: string) {
+    this.toastMessage = msg;
+    this.isToastOpen = true;
+    this.cdr.detectChanges(); // show pop up
   }
 }
