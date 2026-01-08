@@ -61,11 +61,11 @@ export class CategoriesPage implements OnInit {
   categories: any[] = [];
   isLoading: boolean = true;
 
+  public refreshIcon = chevronDownCircleOutline;
+
   constructor(
     private categoryService: CategoryService,
-    private loadingCtrl: LoadingController,
     private cdr: ChangeDetectorRef,
-    private zone: NgZone
   ) { 
     addIcons({ add, pricetagOutline, pricetagsOutline, chevronDownCircleOutline }); 
   }
@@ -82,12 +82,8 @@ export class CategoriesPage implements OnInit {
   }
 
   loadData(isRefresher: boolean = false, event?: any) {
-    // Jika bukan refresh tarik, nyalakan loading layar
-    if (!isRefresher) {
-      this.isLoading = true;
-    }
-
     this.categoryService.getCategories().subscribe({
+      // normalisasi data response
       next: (res: any) => {
         if (Array.isArray(res)) {
           this.categories = res;
@@ -96,16 +92,21 @@ export class CategoriesPage implements OnInit {
         } else {
           this.categories = [];
         }
-        this.isLoading = false; // destroy loading
-        this.cdr.detectChanges();
+
+        this.isLoading = false;   // destroy loading
+        this.cdr.detectChanges(); // refresh
         
-        if (isRefresher && event) event.target.complete();
+        if (isRefresher && event) {
+          event.target.complete();
+        }
       },
       error: (err) => {
         console.error(err);
-        this.isLoading = false; 
+        this.isLoading = false;
         this.cdr.detectChanges();
-        if (isRefresher && event) event.target.complete();
+        if (isRefresher && event) {
+          event.target.complete();
+        }
       }
     });
   }
