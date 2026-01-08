@@ -99,13 +99,15 @@ export class MyFavoritesPage implements OnInit {
   }
 
   async removeFavorite(event: any, news_id: number) {
+    alert("2")
     event.stopPropagation();
-
+    alert("1")
     // const loading = await this.loadingCtrl.create({ message: 'Menghapus...' });
     // await loading.present();
 
     this.newsService.toggleFavorite(news_id, this.user.id).subscribe({
       next: (res: any) => {
+        alert("3")
         //loading.dismiss();
         if (res.result === 'success') {
           this.showToast('Berita dihapus dari favorit');
