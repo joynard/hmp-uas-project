@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth';
@@ -13,26 +13,28 @@ import {
   IonToolbar, 
   IonTitle, 
   IonItem, 
-  IonInput,    // <--- WAJIB ADA (Untuk Edit Nama)
+  IonInput,    
   IonButton, 
   IonIcon, 
   IonLabel,
-  IonAvatar,   // Untuk Foto Profil
+  IonAvatar,   
   IonList,
-  IonToggle,   // Untuk Switch Dark Mode
-  IonImg,     // Untuk menampilkan gambar preview
-  IonButtons, IonMenuButton
+  IonToggle,   
+  IonImg,     
+  IonButtons, 
+  IonMenuButton,
+  IonRefresher,
+  IonRefresherContent
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
-import { camera, logOutOutline, moon, personOutline } from 'ionicons/icons';
+import { camera, logOutOutline, moon, personOutline, chevronDownCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  // --- MASUKKAN DAFTAR KOMPONEN KE SINI ---
   imports: [
     CommonModule, 
     FormsModule,
@@ -50,7 +52,9 @@ import { camera, logOutOutline, moon, personOutline } from 'ionicons/icons';
     IonToggle,
     IonImg,
     IonButtons, 
-    IonMenuButton
+    IonMenuButton,
+    IonRefresher,
+    IonRefresherContent  
   ]
 })
 export class ProfilePage implements OnInit {
@@ -60,70 +64,84 @@ export class ProfilePage implements OnInit {
   selectedFile: File | null = null;
   imgUrl = environment.apiKey + 'uploads/';
 
-  // Theme State
+  // theme State
   isDark: boolean = false;
   currentTheme: string = 'blue';
+
+  public refreshIcon = chevronDownCircleOutline;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private cdr: ChangeDetectorRef 
   ) { 
-    addIcons({ camera, logOutOutline, moon, personOutline });
+    addIcons({ camera, logOutOutline, moon, personOutline, chevronDownCircleOutline });
   }
 
   ngOnInit() {
+    this.loadUserData();
+    this.isDark = this.authService.isDarkMode();
+    this.currentTheme = localStorage.getItem('theme_color') || 'blue';
+  }
+
+  // load data user dari storage --> localstorage implementation
+  loadUserData() {
     this.user = this.authService.getUser();
     if(this.user) {
       this.editName = this.user.fullname;
     }
+  }
 
-    this.isDark = this.authService.isDarkMode();
-    this.currentTheme = localStorage.getItem('theme_color') || 'blue';
-
-    console.log("ngoninit");
+  // handle refresh
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      this.loadUserData();
+      event.target.complete();
+      this.cdr.detectChanges();
+    }, 1000);
   }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
-      
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        // Kita update avatar object lokal untuk preview
-        // Pastikan di HTML kamu pakai [src]="selectedFile ? previewUrl : serverUrl"
-        // atau cara hacky ini (kurang ideal tapi jalan):
-        this.user.avatar = null; 
-      };
-      reader.readAsDataURL(file);
     }
   }
 
   async saveProfile() {
-    alert ('1');
-    // const loading = await this.loadingCtrl.create({ message: 'Menyimpan...' });
-    // await loading.present();
-    alert ('2');
+    // validasi input
+    if (!this.editName) {
+      this.showToast('Nama tidak boleh kosong!');
+      return;
+    }
+
+    // display loading
+    const loading = await this.loadingCtrl.create({ message: 'Menyimpan...' });
+    await loading.present();
+
     this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
-      next: (res: any) => {
-        // loading.dismiss();
+      next: async (res: any) => {
+        await loading.dismiss(); // tutup loading
+        
         if(res.result === 'success') {
-          alert (res.result)
-          alert ('3');
+          // update data session di device user
           this.authService.saveSession(res.data);
-          alert(res.data)
-          this.user = res.data;
-          this.selectedFile = null; 
+          this.user = res.data; // update tampilan
+          
+          this.selectedFile = null; // reset file input
           this.showToast('Profil berhasil diperbarui!');
+          
+          this.cdr.detectChanges(); // refresh 
         } else {
-          this.showToast('Gagal update.');
+          this.showToast('Gagal update: ' + res.message);
         }
       },
-      error: (err) => {
-        // loading.dismiss();
-        this.showToast('Error koneksi.');
+      error: async (err) => {
+        await loading.dismiss();
+        console.error(err);
+        this.showToast('Gagal koneksi server.');
       }
     });
   }
