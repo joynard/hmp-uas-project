@@ -30,13 +30,28 @@ body[color-theme="orange"] { --ion-color-primary: #ffc409; --header-gradient: li
 body[color-theme="red"] { --ion-color-primary: #eb445a; --header-gradient: linear-gradient(135deg, #eb445a, #ff4961); }
 body[color-theme="green"] { --ion-color-primary: #2dd36f; --header-gradient: linear-gradient(135deg, #2dd36f, #28ba62); }
 
-/* Class untuk Header/Toolbar */
 .header-gradient, 
 ion-toolbar.header-gradient {
   --background: var(--header-gradient) !important;
+  background: var(--header-gradient) !important;
   --color: white;
-  --border-width: 0; 
+  color: white;
+  
   ion-title, ion-icon, ion-back-button, ion-menu-button { color: white !important; }
+}
+
+/* 2. KHUSUS TOMBOL (Agar tidak kotak di belakangnya) */
+ion-button.header-gradient {
+  /* Pembungkus luar transparan */
+  --background: var(--header-gradient) !important;
+  background: transparent !important; 
+  
+  /* Text putih */
+  --color: white !important;
+  color: white !important;
+  
+  /* Shadow halus */
+  box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
 }
 
 /*
@@ -336,4 +351,20 @@ ion-refresher-content {
     width: 100% !important;
     height: auto !important;
   }
+}
+
+/*
+ * 9. GLOBAL TOAST STYLING (Agar sesuai tema & rounded)
+ * ----------------------------------------------------------------------------
+ */
+ion-toast {
+  /* 1. Samakan sudut membulat dengan Button & Input (10px - 12px) */
+  --border-radius: 12px !important;
+  
+  /* 2. Berikan shadow biar terlihat melayang ("Floating") */
+  --box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+  
+  /* 4. Font Styling */
+  font-weight: 500;
+  text-align: center;
 }
