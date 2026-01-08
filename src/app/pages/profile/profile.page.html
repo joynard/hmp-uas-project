@@ -54,8 +54,16 @@
       </ion-item>
     </ion-list>
     
-    <ion-button expand="block" (click)="saveProfile()" class="btn-submit header-gradient">
-      SIMPAN PERUBAHAN
+    <ion-button 
+      expand="block" 
+      (click)="saveProfile()" 
+      class="btn-submit header-gradient"
+      [disabled]="isLoading">
+      
+      <ion-spinner name="crescent" color="light" *ngIf="isLoading"></ion-spinner>
+      
+      <span *ngIf="!isLoading">SIMPAN PERUBAHAN</span>
+      
     </ion-button>
   </div>
 

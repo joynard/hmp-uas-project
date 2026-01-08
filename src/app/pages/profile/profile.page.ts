@@ -4,25 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { ToastController, LoadingController } from '@ionic/angular'; 
+// Import ToastController saja (LoadingController kita buang biar ga macet)
+import { ToastController } from '@ionic/angular'; 
 
 import { 
-  IonContent, 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
-  IonItem, 
-  IonInput,    
-  IonButton, 
-  IonIcon, 
-  IonLabel,  
-  IonList,
-  IonToggle,     
-  IonButtons, 
-  IonMenuButton,
-  IonRefresher,
-  IonRefresherContent,
-  IonSpinner
+  IonContent, IonHeader, IonToolbar, IonTitle, IonItem, IonInput,    
+  IonButton, IonIcon, IonLabel, IonList, IonToggle, IonButtons, 
+  IonMenuButton, IonRefresher, IonRefresherContent, IonSpinner
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -49,11 +37,13 @@ export class ProfilePage implements OnInit {
   currentTheme: string = 'blue';
   public refreshIcon = chevronDownCircleOutline;
 
+  // VARIABLE PENGGANTI LOADING CONTROLLER
+  isLoading: boolean = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
-    private loadingCtrl: LoadingController, 
-    private toastCtrl: ToastController,
+    private toastCtrl: ToastController, // Kita pakai Toast biar cantik
     private cdr: ChangeDetectorRef 
   ) { 
     addIcons({ camera, logOutOutline, moon, personOutline, chevronDownCircleOutline });
@@ -91,41 +81,52 @@ export class ProfilePage implements OnInit {
     }
   }
 
-  // --- FUNGSI SIMPAN VERSI FINAL (TANPA LOADING CONTROLLER) ---
+  // --- LOGIC SIMPAN CANTIK & AMAN ---
   async saveProfile() {
-    // 1. Validasi
     if (!this.editName) {
-      alert('Nama tidak boleh kosong!');
+      this.presentToast('Nama tidak boleh kosong!', 'warning');
       return;
     }
 
-    // 2. Tanda visual manual (tanpa Controller)
-    // Kita ubah teks tombol lewat variable (kalau mau) atau biarkan saja
-    // Yang penting kita pastikan request terkirim
-    alert('Proses dimulai... Mengirim data ke server.');
+    // 1. Aktifkan Loading di Tombol
+    this.isLoading = true; 
 
-    // 3. LANGSUNG KIRIM (Tanpa await loading)
+    // 2. Kirim Request
     this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
       next: (res: any) => {
-        // ALERT 4: RESPON SERVER
-        alert('Server Response: ' + JSON.stringify(res)); 
-
+        // Matikan Loading
+        this.isLoading = false;
+        
         if(res.result === 'success') {
           this.authService.saveSession(res.data);
           this.user = res.data; 
           this.selectedFile = null; 
-          this.cdr.detectChanges(); 
           
-          alert('BERHASIL! Profil sudah diperbarui.'); // Pakai alert biasa biar pasti muncul
+          this.presentToast('Profil berhasil diperbarui!', 'success');
+          this.cdr.detectChanges(); 
         } else {
-          alert('GAGAL: ' + res.message);
+          this.presentToast('Gagal update: ' + res.message, 'danger');
         }
       },
       error: (err) => {
+        this.isLoading = false; // Pastikan loading mati kalau error
         console.error(err);
-        alert('ERROR KONEKSI: ' + JSON.stringify(err));
+        this.presentToast('Gagal koneksi server.', 'danger');
       }
     });
+  }
+
+  // Helper Toast Cantik
+  async presentToast(msg: string, color: string = 'dark') {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 2000,
+      position: 'bottom',
+      color: color, // Bisa warna-warni (success/danger)
+      cssClass: 'custom-toast', // Opsional styling
+      buttons: [{ icon: 'close', role: 'cancel' }]
+    });
+    await toast.present();
   }
 
   changeTheme(color: string) {
