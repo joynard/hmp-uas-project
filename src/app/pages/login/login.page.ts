@@ -93,11 +93,21 @@ export class LoginPage implements OnInit {
   }
 
   async presentToast(msg: string) {
+  // Debugging: Cek di Console apakah fungsi ini terpanggil
+  console.log('Mencoba menampilkan Toast:', msg); 
+
+  try {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 2000,
-      position: 'bottom'
+      duration: 3000,     // Durasi agak lamaan dikit (3 detik)
+      position: 'top',    // Ganti ke TOP (Atas) biar paling aman dari keyboard
+      color: 'danger',    // Ganti ke MERAH (Biar mencolok mata kalau muncul)
     });
-    toast.present();
+
+    await toast.present(); // WAJIB ADA AWAIT
+    console.log('Toast berhasil di-present');
+  } catch (e) {
+    console.error('Gagal memunculkan Toast:', e);
   }
+}
 }
