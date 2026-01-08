@@ -58,6 +58,7 @@ export class AuthService {
 
   // 1. FUNGSI UPDATE PROFIL + FOTO
   updateProfile(userId: number, fullname: string, avatarFile: File | null) {
+    alert ('1');
     const formData = new FormData();
     formData.append('user_id', userId.toString());
     formData.append('fullname', fullname);

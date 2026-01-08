@@ -81,6 +81,8 @@ export class ProfilePage implements OnInit {
 
     this.isDark = this.authService.isDarkMode();
     this.currentTheme = localStorage.getItem('theme_color') || 'blue';
+
+    console.log("ngoninit");
   }
 
   onFileSelected(event: any) {
@@ -100,26 +102,29 @@ export class ProfilePage implements OnInit {
   }
 
   async saveProfile() {
-    const loading = await this.loadingCtrl.create({ message: 'Menyimpan...' });
-    await loading.present();
+    alert ('1');
+    // const loading = await this.loadingCtrl.create({ message: 'Menyimpan...' });
+    // await loading.present();
 
-    this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
-      next: (res: any) => {
-        loading.dismiss();
-        if(res.result === 'success') {
-          this.authService.saveSession(res.data);
-          this.user = res.data;
-          this.selectedFile = null; 
-          this.showToast('Profil berhasil diperbarui!');
-        } else {
-          this.showToast('Gagal update.');
-        }
-      },
-      error: (err) => {
-        loading.dismiss();
-        this.showToast('Error koneksi.');
-      }
-    });
+    // this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
+    //   next: (res: any) => {
+    //     loading.dismiss();
+    //     if(res.result === 'success') {
+    //       alert (res.result)
+    //       this.authService.saveSession(res.data);
+    //       alert(res.data)
+    //       this.user = res.data;
+    //       this.selectedFile = null; 
+    //       this.showToast('Profil berhasil diperbarui!');
+    //     } else {
+    //       this.showToast('Gagal update.');
+    //     }
+    //   },
+    //   error: (err) => {
+    //     loading.dismiss();
+    //     this.showToast('Error koneksi.');
+    //   }
+    // });
   }
 
   changeTheme(color: string) {
