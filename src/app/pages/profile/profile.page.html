@@ -33,7 +33,7 @@
     </div>
 
     <div class="avatar-wrapper" *ngIf="!user">
-      <img src="assets/no-img.png" style="opacity: 0.5" />
+       <ion-spinner name="crescent"></ion-spinner>
     </div>
     
     <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">

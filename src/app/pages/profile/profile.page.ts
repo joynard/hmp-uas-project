@@ -4,10 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-// Import Service Controller (Manual)
 import { ToastController, LoadingController } from '@ionic/angular'; 
 
-// --- IMPORT STANDALONE COMPONENTS ---
 import { 
   IonContent, 
   IonHeader, 
@@ -23,7 +21,8 @@ import {
   IonButtons, 
   IonMenuButton,
   IonRefresher,
-  IonRefresherContent
+  IonRefresherContent,
+  IonSpinner 
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -51,12 +50,13 @@ import { camera, logOutOutline, moon, personOutline, chevronDownCircleOutline } 
     IonButtons, 
     IonMenuButton,
     IonRefresher,
-    IonRefresherContent
+    IonRefresherContent,
+    IonSpinner 
   ]
 })
 export class ProfilePage implements OnInit {
 
-  user: any = null; // Default null agar di HTML bisa kita cek *ngIf
+  user: any = null;
   editName: string = '';
   selectedFile: File | null = null;
   imgUrl = environment.apiKey + 'uploads/';
@@ -69,9 +69,9 @@ export class ProfilePage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private loadingCtrl: LoadingController, // Inject Loading
-    private toastCtrl: ToastController,     // Inject Toast
-    private cdr: ChangeDetectorRef          // Inject CDR (Obat Refresh)
+    private loadingCtrl: LoadingController, 
+    private toastCtrl: ToastController,
+    private cdr: ChangeDetectorRef 
   ) { 
     addIcons({ camera, logOutOutline, moon, personOutline, chevronDownCircleOutline });
   }
@@ -81,24 +81,19 @@ export class ProfilePage implements OnInit {
     this.currentTheme = localStorage.getItem('theme_color') || 'blue';
   }
 
-  // Dipanggil SETIAP KALI halaman akan tampil (bukan cuma sekali saat init)
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.loadUserData();
   }
 
   loadUserData() {
-    // 1. Ambil data
     this.user = this.authService.getUser();
     
-    // 2. Isi form
     if(this.user) {
       this.editName = this.user.fullname;
     } else {
       this.router.navigateByUrl('/login');
     }
-    
-    // 3. OBAT AMPUH: Paksa update tampilan DETIK INI JUGA
-    // Ini yang memperbaiki masalah "harus refresh dulu baru muncul"
+
     this.cdr.detectChanges(); 
   }
 
@@ -106,6 +101,7 @@ export class ProfilePage implements OnInit {
     setTimeout(() => {
       this.loadUserData();
       event.target.complete();
+      this.cdr.detectChanges();
     }, 1000);
   }
 
@@ -117,48 +113,41 @@ export class ProfilePage implements OnInit {
   }
 
   async saveProfile() {
-    // Validasi
     if (!this.editName) {
-      this.showToast('Nama tidak boleh kosong!');
+      this.presentToast('Nama tidak boleh kosong!');
       return;
     }
 
-    // 1. TAMPILKAN LOADING DULUAN (Supaya user tau tombolnya bereaksi)
     const loading = await this.loadingCtrl.create({ 
       message: 'Menyimpan...',
       spinner: 'crescent'
     });
     await loading.present();
 
-    // 2. Kirim ke Server
     this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
       next: async (res: any) => {
-        await loading.dismiss(); // Tutup loading
+        await loading.dismiss(); 
         
         if(res.result === 'success') {
-          // Update Session Lokal
           this.authService.saveSession(res.data);
           this.user = res.data; 
-          
           this.selectedFile = null; 
-          this.showToast('Profil berhasil diperbarui!');
           
-          // Update Tampilan Lagi
+          this.presentToast('Profil berhasil diperbarui!');
           this.cdr.detectChanges(); 
         } else {
-          this.showToast('Gagal update: ' + res.message);
+          this.presentToast('Gagal update: ' + res.message);
         }
       },
       error: async (err) => {
         await loading.dismiss();
         console.error(err);
-        this.showToast('Gagal koneksi ke server.');
+        this.presentToast('Gagal koneksi server.');
       }
     });
   }
 
-  // Helper untuk menampilkan Toast Manual
-  async showToast(msg: string) {
+  async presentToast(msg: string) {
     const toast = await this.toastCtrl.create({
       message: msg,
       duration: 2000,

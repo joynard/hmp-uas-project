@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LoadingController } from '@ionic/angular'; // Service tetap dari sini
 import { CategoryService } from 'src/app/services/category'; 
 import { RouterLink } from '@angular/router';
 
