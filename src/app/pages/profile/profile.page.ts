@@ -91,58 +91,41 @@ export class ProfilePage implements OnInit {
     }
   }
 
-  // --- FUNGSI SIMPAN DENGAN DETEKTIF ALERT ---
+  // --- FUNGSI SIMPAN VERSI FINAL (TANPA LOADING CONTROLLER) ---
   async saveProfile() {
-    // 1. CEK TOMBOL
-    alert('1. Tombol ditekan'); 
-
-    // 2. CEK DATA USER
-    if (!this.user || !this.user.id) {
-      alert('ERROR: Data User Hilang/Null. Silakan Login ulang.');
-      return;
-    }
-
+    // 1. Validasi
     if (!this.editName) {
-      alert('Nama kosong!');
+      alert('Nama tidak boleh kosong!');
       return;
     }
 
-    try {
-      // 3. COBA TAMPILKAN LOADING
-      alert('2. Mencoba loading...');
-      const loading = await this.loadingCtrl.create({ 
-        message: 'Menyimpan...',
-        spinner: 'crescent'
-      });
-      await loading.present();
+    // 2. Tanda visual manual (tanpa Controller)
+    // Kita ubah teks tombol lewat variable (kalau mau) atau biarkan saja
+    // Yang penting kita pastikan request terkirim
+    alert('Proses dimulai... Mengirim data ke server.');
 
-      // 4. KIRIM REQUEST
-      alert('3. Mengirim ke server: ' + environment.apiKey);
-      
-      this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
-        next: async (res: any) => {
-          await loading.dismiss(); 
-          alert('4. Response: ' + JSON.stringify(res)); // LIHAT HASILNYA
+    // 3. LANGSUNG KIRIM (Tanpa await loading)
+    this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
+      next: (res: any) => {
+        // ALERT 4: RESPON SERVER
+        alert('Server Response: ' + JSON.stringify(res)); 
 
-          if(res.result === 'success') {
-            this.authService.saveSession(res.data);
-            this.user = res.data; 
-            this.selectedFile = null; 
-            this.cdr.detectChanges(); 
-            // alert('SUKSES!');
-          } else {
-            // alert('GAGAL API: ' + res.message);
-          }
-        },
-        error: async (err) => {
-          await loading.dismiss();
-          alert('ERROR HTTP: ' + JSON.stringify(err)); // LIHAT ERRORNYA
+        if(res.result === 'success') {
+          this.authService.saveSession(res.data);
+          this.user = res.data; 
+          this.selectedFile = null; 
+          this.cdr.detectChanges(); 
+          
+          alert('BERHASIL! Profil sudah diperbarui.'); // Pakai alert biasa biar pasti muncul
+        } else {
+          alert('GAGAL: ' + res.message);
         }
-      });
-
-    } catch (e) {
-      alert('CRASH SYSTEM: ' + e);
-    }
+      },
+      error: (err) => {
+        console.error(err);
+        alert('ERROR KONEKSI: ' + JSON.stringify(err));
+      }
+    });
   }
 
   changeTheme(color: string) {
