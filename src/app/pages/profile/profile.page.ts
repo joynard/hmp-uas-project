@@ -4,13 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-// Import ToastController saja (LoadingController kita buang biar ga macet)
-import { ToastController } from '@ionic/angular'; 
 
 import { 
   IonContent, IonHeader, IonToolbar, IonTitle, IonItem, IonInput,    
   IonButton, IonIcon, IonLabel, IonList, IonToggle, IonButtons, 
-  IonMenuButton, IonRefresher, IonRefresherContent, IonSpinner
+  IonMenuButton, IonRefresher, IonRefresherContent, IonSpinner,
+  IonToast 
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -24,7 +23,8 @@ import { camera, logOutOutline, moon, personOutline, chevronDownCircleOutline } 
   imports: [
     CommonModule, FormsModule, IonContent, IonHeader, IonToolbar, IonTitle, 
     IonItem, IonInput, IonButton, IonIcon, IonLabel, IonList, IonToggle, 
-    IonButtons, IonMenuButton, IonRefresher, IonRefresherContent, IonSpinner
+    IonButtons, IonMenuButton, IonRefresher, IonRefresherContent, IonSpinner,
+    IonToast
   ]
 })
 export class ProfilePage implements OnInit {
@@ -37,13 +37,13 @@ export class ProfilePage implements OnInit {
   currentTheme: string = 'blue';
   public refreshIcon = chevronDownCircleOutline;
 
-  // VARIABLE PENGGANTI LOADING CONTROLLER
-  isLoading: boolean = false;
+  isToastOpen = false;
+  toastMessage = '';
+  isLoading = false;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toastCtrl: ToastController, // Kita pakai Toast biar cantik
     private cdr: ChangeDetectorRef 
   ) { 
     addIcons({ camera, logOutOutline, moon, personOutline, chevronDownCircleOutline });
@@ -53,8 +53,8 @@ export class ProfilePage implements OnInit {
     this.isDark = this.authService.isDarkMode();
     this.currentTheme = localStorage.getItem('theme_color') || 'blue';
   }
-
-  ionViewDidEnter() {
+  
+  ionViewWillEnter() {
     this.loadUserData();
   }
 
@@ -64,6 +64,13 @@ export class ProfilePage implements OnInit {
       this.editName = this.user.fullname;
     } 
     this.cdr.detectChanges(); 
+  }
+
+  getAvatar(): string {
+    if (this.user && this.user.avatar) {
+      return this.imgUrl + this.user.avatar;
+    }
+    return 'https://ionicframework.com/docs/img/demos/avatar.svg';
   }
 
   handleRefresh(event: any) {
@@ -81,52 +88,44 @@ export class ProfilePage implements OnInit {
     }
   }
 
-  // --- LOGIC SIMPAN CANTIK & AMAN ---
+  setOpen(isOpen: boolean, msg: string = '') {
+    this.toastMessage = msg;
+    this.isToastOpen = isOpen;
+    this.cdr.detectChanges(); 
+  }
+
   async saveProfile() {
     if (!this.editName) {
-      this.presentToast('Nama tidak boleh kosong!', 'warning');
+      this.setOpen(true, 'Nama tidak boleh kosong!');
       return;
     }
 
-    // 1. Aktifkan Loading di Tombol
     this.isLoading = true; 
 
-    // 2. Kirim Request
     this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
       next: (res: any) => {
-        // Matikan Loading
         this.isLoading = false;
         
         if(res.result === 'success') {
+          // update session
           this.authService.saveSession(res.data);
+          
+          // update variable user local
           this.user = res.data; 
           this.selectedFile = null; 
           
-          this.presentToast('Profil berhasil diperbarui!', 'success');
+          this.setOpen(true, 'Profil berhasil diperbarui!');
           this.cdr.detectChanges(); 
         } else {
-          this.presentToast('Gagal update: ' + res.message, 'danger');
+          this.setOpen(true, 'Gagal update: ' + res.message);
         }
       },
       error: (err) => {
-        this.isLoading = false; // Pastikan loading mati kalau error
+        this.isLoading = false;
         console.error(err);
-        this.presentToast('Gagal koneksi server.', 'danger');
+        this.setOpen(true, 'Gagal koneksi server.');
       }
     });
-  }
-
-  // Helper Toast Cantik
-  async presentToast(msg: string, color: string = 'dark') {
-    const toast = await this.toastCtrl.create({
-      message: msg,
-      duration: 2000,
-      position: 'bottom',
-      color: color, // Bisa warna-warni (success/danger)
-      cssClass: 'custom-toast', // Opsional styling
-      buttons: [{ icon: 'close', role: 'cancel' }]
-    });
-    await toast.present();
   }
 
   changeTheme(color: string) {
