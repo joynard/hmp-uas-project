@@ -44,7 +44,7 @@ ion-toolbar.header-gradient {
 ion-button.header-gradient {
   /* Pembungkus luar transparan */
   --background: var(--header-gradient) !important;
-  background: transparent !important; 
+  background: transparent !important;
   
   /* Text putih */
   --color: white !important;
@@ -52,6 +52,27 @@ ion-button.header-gradient {
   
   /* Shadow halus */
   box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
+}
+
+ion-fab-button.header-gradient {
+  /* Hapus background kotak pembungkus */
+  background: transparent !important;
+  
+  /* Warnai lingkaran dalam saja */
+  --background: var(--header-gradient) !important;
+  
+  /* Pastikan icon putih */
+  --color: white !important;
+  color: white !important;
+  
+  /* Pastikan bentuknya bulat 50% (bukan rounded 10px seperti tombol biasa) */
+  --border-radius: 50% !important;
+  border-radius: 50% !important;
+  
+  /* Shadow agar melayang cantik */
+  box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.4);
+  
+  ion-icon { color: white !important; }
 }
 
 /*
