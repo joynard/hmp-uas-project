@@ -103,28 +103,29 @@ export class ProfilePage implements OnInit {
 
   async saveProfile() {
     alert ('1');
-    // const loading = await this.loadingCtrl.create({ message: 'Menyimpan...' });
-    // await loading.present();
-
-    // this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
-    //   next: (res: any) => {
-    //     loading.dismiss();
-    //     if(res.result === 'success') {
-    //       alert (res.result)
-    //       this.authService.saveSession(res.data);
-    //       alert(res.data)
-    //       this.user = res.data;
-    //       this.selectedFile = null; 
-    //       this.showToast('Profil berhasil diperbarui!');
-    //     } else {
-    //       this.showToast('Gagal update.');
-    //     }
-    //   },
-    //   error: (err) => {
-    //     loading.dismiss();
-    //     this.showToast('Error koneksi.');
-    //   }
-    // });
+    const loading = await this.loadingCtrl.create({ message: 'Menyimpan...' });
+    await loading.present();
+    alert ('2');
+    this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
+      next: (res: any) => {
+        loading.dismiss();
+        if(res.result === 'success') {
+          alert (res.result)
+          alert ('3');
+          this.authService.saveSession(res.data);
+          alert(res.data)
+          this.user = res.data;
+          this.selectedFile = null; 
+          this.showToast('Profil berhasil diperbarui!');
+        } else {
+          this.showToast('Gagal update.');
+        }
+      },
+      error: (err) => {
+        loading.dismiss();
+        this.showToast('Error koneksi.');
+      }
+    });
   }
 
   changeTheme(color: string) {

@@ -58,13 +58,14 @@ export class AuthService {
 
   // 1. FUNGSI UPDATE PROFIL + FOTO
   updateProfile(userId: number, fullname: string, avatarFile: File | null) {
-    alert ('1');
+    alert ('4a');
     const formData = new FormData();
     formData.append('user_id', userId.toString());
     formData.append('fullname', fullname);
     if (avatarFile) {
       formData.append('avatar', avatarFile);
     }
+    alert('4b')
     return this.http.post(environment.apiKey + 'profile.php', formData);
   }
 
