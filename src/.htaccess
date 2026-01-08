@@ -5,9 +5,15 @@
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /
+  
+  # HAPUS ATAU KOMENTARI BARIS INI:
+  # RewriteBase /
+  
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+  
+  # PERHATIKAN: Hapus tanda '/' di depan index.html
+  # Ini artinya: "Cari index.html di folder ini saja", bukan di root domain
+  RewriteRule . index.html [L]
 </IfModule>
