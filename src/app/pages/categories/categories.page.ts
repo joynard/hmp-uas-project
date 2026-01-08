@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoadingController } from '@ionic/angular'; // Service tetap dari sini
@@ -61,7 +61,8 @@ export class CategoriesPage implements OnInit {
   constructor(
     private categoryService: CategoryService,
     private loadingCtrl: LoadingController,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) { 
     addIcons({ add, pricetagOutline, pricetagsOutline, chevronDownCircleOutline }); 
   }
@@ -69,7 +70,7 @@ export class CategoriesPage implements OnInit {
   ngOnInit() {
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.loadData(false); 
   }
 
@@ -87,23 +88,27 @@ export class CategoriesPage implements OnInit {
 
     this.categoryService.getCategories().subscribe({
       next: (res: any) => {
-        this.categories = res;
+        this.zone.run(() => {
+          
+          if (Array.isArray(res)) {
+            this.categories = res;
+          } else if (res && res.data && Array.isArray(res.data)) {
+            this.categories = res.data;
+          } else {
+            this.categories = [];
+          }
 
-        this.cdr.detectChanges();
+          console.log('Data loaded:', this.categories); // debug console
+          this.cdr.detectChanges(); 
+        });
         
-        if (isRefresher && event) {
-          event.target.complete(); 
-        } else if (loading) {
-          loading.dismiss(); 
-        }
+        if (isRefresher && event) event.target.complete(); 
+        if (loading) loading.dismiss(); 
       },
       error: (err) => {
         console.error(err);
-        if (isRefresher && event) {
-          event.target.complete();
-        } else if (loading) {
-          loading.dismiss();
-        }
+        if (isRefresher && event) event.target.complete();
+        if (loading) loading.dismiss();
       }
     });
   }
