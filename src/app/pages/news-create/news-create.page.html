@@ -63,7 +63,7 @@
 
       <div class="upload-section">
         <ion-label class="upload-label">
-          <ion-icon name="images-outline"></ion-icon> Foto Galeri (Min. 4)
+          <ion-icon name="images-outline"></ion-icon> Foto Galeri (Boleh lebih dari 1)
         </ion-label>
         
         <div class="file-input-wrapper">
@@ -82,5 +82,13 @@
       TERBITKAN BERITA
     </ion-button>
   </div>
+
+  <ion-toast
+    [isOpen]="isToastOpen"
+    [message]="toastMessage"
+    [duration]="2500"
+    position="bottom"
+    (didDismiss)="isToastOpen = false"
+  ></ion-toast>
 
 </ion-content>

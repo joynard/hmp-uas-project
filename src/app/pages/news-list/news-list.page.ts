@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -31,7 +31,7 @@ import {
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
-import { logOutOutline, star, chatbubbleOutline } from 'ionicons/icons';
+import { logOutOutline, star, chatbubbleOutline, chevronDownCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-news-list',
@@ -71,10 +71,13 @@ export class NewsListPage implements OnInit {
   userParams: any;
   imgUrl = environment.apiKey + 'uploads/'; 
 
+  public refreshIcon = chevronDownCircleOutline;
+
   constructor(
     private newsService: NewsService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) { 
     this.userParams = this.authService.getUser();
     addIcons({ logOutOutline, star, chatbubbleOutline });
@@ -86,15 +89,33 @@ export class NewsListPage implements OnInit {
     this.loadNews();
   }
 
-  loadNews() {
+  loadNews(event?: any) {
     this.newsService.getNews().subscribe({
       next: (res: any) => {
-        this.newsList = res;
+        // cek if array
+        if (Array.isArray(res)) {
+          this.newsList = res;
+        } else {
+          this.newsList = [];
+        }
+        this.cdr.detectChanges();
+
+        if (event) {
+          event.target.complete();
+        }
       },
       error: (err) => {
         console.error(err);
+        this.cdr.detectChanges();
+        if (event) {
+          event.target.complete();
+        }
       }
     });
+  }
+
+  handleRefresh(event: any) {
+    this.loadNews(event);
   }
 
   logout() {

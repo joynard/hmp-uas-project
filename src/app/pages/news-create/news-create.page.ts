@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ToastController, NavController } from '@ionic/angular';
+import { Router } from '@angular/router'; 
 import { NewsService } from 'src/app/services/news';
 import { CategoryService } from 'src/app/services/category';
 import { AuthService } from 'src/app/services/auth';
@@ -18,14 +18,15 @@ import {
   IonList, 
   IonItem, 
   IonLabel, 
-  IonInput,        // Judul Berita
-  IonTextarea,     // Deskripsi Berita
-  IonSelect,       // Dropdown Kategori
-  IonSelectOption, // Pilihan Kategori
+  IonInput,        
+  IonTextarea,     
+  IonSelect,       
+  IonSelectOption, 
   IonText,
   IonThumbnail,
   IonImg,
-  IonBackButton
+  IonBackButton,
+  IonToast 
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -44,7 +45,6 @@ import {
   templateUrl: './news-create.page.html',
   styleUrls: ['./news-create.page.scss'],
   standalone: true,
-  // --- MASUKKAN DAFTAR KOMPONEN DI SINI ---
   imports: [
     CommonModule, 
     FormsModule, 
@@ -65,7 +65,8 @@ import {
     IonText,
     IonThumbnail,
     IonImg,
-    IonBackButton
+    IonBackButton,
+    IonToast 
   ]
 })
 export class NewsCreatePage implements OnInit {
@@ -80,21 +81,20 @@ export class NewsCreatePage implements OnInit {
   categories: any[] = [];
   user: any = {};
 
+  // variable toast
+  isToastOpen = false;
+  toastMessage = '';
+
   constructor(
     private newsService: NewsService,
     private categoryService: CategoryService,
     private authService: AuthService,
-    private toastCtrl: ToastController,
-    private navCtrl: NavController
+    private router: Router,
+    private cdr: ChangeDetectorRef 
   ) {
     addIcons({ 
-      paperPlaneOutline, 
-      newspaperOutline, 
-      gridOutline, 
-      documentTextOutline, 
-      imageOutline, 
-      imagesOutline,
-      checkmarkCircle
+      paperPlaneOutline, newspaperOutline, gridOutline, 
+      documentTextOutline, imageOutline, imagesOutline, checkmarkCircle
     });
    }
 
@@ -122,16 +122,34 @@ export class NewsCreatePage implements OnInit {
     }
   }
 
-  async submit() {
+  // display toast
+  showToast(msg: string) {
+    this.toastMessage = msg;
+    this.isToastOpen = true;
+    this.cdr.detectChanges(); // refresh
+  }
+
+  submit() {
+    // validasi input wajib
     if (!this.title || !this.description || !this.mainPhoto || this.selectedCategories.length === 0) {
       this.showToast('Judul, Deskripsi, Kategori, dan Foto Utama wajib diisi!');
       return;
     }
 
-    if (this.extraPhotos.length < 1) {
-      this.showToast('Sebaiknya sertakan foto tambahan untuk detail berita.');
+    // validasi jumlah foto (MIN 4 - MAX 12)
+    const totalGaleri = this.extraPhotos.length;
+
+    if (totalGaleri < 4) {
+      this.showToast(`Minimal wajib upload 4 foto galeri! (Kamu pilih: ${totalGaleri})`);
+      return;
     }
 
+    if (totalGaleri > 12) {
+      this.showToast(`Maksimal hanya boleh 12 foto galeri! (Kamu pilih: ${totalGaleri})`);
+      return;
+    }
+
+    // if validasi lolos --> lanjut proses upload
     const formData = new FormData();
     formData.append('user_id', this.user.id);
     formData.append('title', this.title);
@@ -143,26 +161,25 @@ export class NewsCreatePage implements OnInit {
       formData.append('images[]', file);
     });
 
+    // display notif proses pas upload foto
+    this.showToast('Sedang mengupload berita & foto...');
+
     this.newsService.createNews(formData).subscribe({
       next: (res: any) => {
         if (res.result === 'success') {
           this.showToast('Berita berhasil diterbitkan!');
-          this.navCtrl.back();
+          setTimeout(() => {
+            this.router.navigateByUrl('/app/home');
+          }, 1500);
         } else {
+          // catch error dari php exmp: judul sama
           this.showToast(res.message);
         }
       },
       error: (err) => {
-        this.showToast('Gagal upload: ' + JSON.stringify(err));
+        console.error(err);
+        this.showToast('Gagal koneksi ke server.');
       }
     });
-  }
-
-  async showToast(msg: string) {
-    const toast = await this.toastCtrl.create({
-      message: msg,
-      duration: 2000
-    });
-    toast.present();
   }
 }
