@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoadingController } from '@ionic/angular'; // Service tetap dari sini
@@ -60,7 +60,8 @@ export class CategoriesPage implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private cdr: ChangeDetectorRef
   ) { 
     addIcons({ add, pricetagOutline, pricetagsOutline, chevronDownCircleOutline }); 
   }
@@ -87,6 +88,8 @@ export class CategoriesPage implements OnInit {
     this.categoryService.getCategories().subscribe({
       next: (res: any) => {
         this.categories = res;
+
+        this.cdr.detectChanges();
         
         if (isRefresher && event) {
           event.target.complete(); 
