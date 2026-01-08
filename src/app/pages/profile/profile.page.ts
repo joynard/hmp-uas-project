@@ -22,7 +22,7 @@ import {
   IonMenuButton,
   IonRefresher,
   IonRefresherContent,
-  IonSpinner 
+  IonSpinner
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -34,24 +34,9 @@ import { camera, logOutOutline, moon, personOutline, chevronDownCircleOutline } 
   styleUrls: ['./profile.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule,
-    IonContent, 
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
-    IonItem, 
-    IonInput, 
-    IonButton, 
-    IonIcon, 
-    IonLabel,
-    IonList,
-    IonToggle,
-    IonButtons, 
-    IonMenuButton,
-    IonRefresher,
-    IonRefresherContent,
-    IonSpinner 
+    CommonModule, FormsModule, IonContent, IonHeader, IonToolbar, IonTitle, 
+    IonItem, IonInput, IonButton, IonIcon, IonLabel, IonList, IonToggle, 
+    IonButtons, IonMenuButton, IonRefresher, IonRefresherContent, IonSpinner
   ]
 })
 export class ProfilePage implements OnInit {
@@ -60,10 +45,8 @@ export class ProfilePage implements OnInit {
   editName: string = '';
   selectedFile: File | null = null;
   imgUrl = environment.apiKey + 'uploads/';
-
   isDark: boolean = false;
   currentTheme: string = 'blue';
-
   public refreshIcon = chevronDownCircleOutline;
 
   constructor(
@@ -87,13 +70,9 @@ export class ProfilePage implements OnInit {
 
   loadUserData() {
     this.user = this.authService.getUser();
-    
     if(this.user) {
       this.editName = this.user.fullname;
-    } else {
-      this.router.navigateByUrl('/login');
-    }
-
+    } 
     this.cdr.detectChanges(); 
   }
 
@@ -112,50 +91,58 @@ export class ProfilePage implements OnInit {
     }
   }
 
+  // --- FUNGSI SIMPAN DENGAN DETEKTIF ALERT ---
   async saveProfile() {
-    if (!this.editName) {
-      this.presentToast('Nama tidak boleh kosong!');
+    // 1. CEK TOMBOL
+    alert('1. Tombol ditekan'); 
+
+    // 2. CEK DATA USER
+    if (!this.user || !this.user.id) {
+      alert('ERROR: Data User Hilang/Null. Silakan Login ulang.');
       return;
     }
 
-    const loading = await this.loadingCtrl.create({ 
-      message: 'Menyimpan...',
-      spinner: 'crescent'
-    });
-    await loading.present();
+    if (!this.editName) {
+      alert('Nama kosong!');
+      return;
+    }
 
-    this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
-      next: async (res: any) => {
-        await loading.dismiss(); 
-        
-        if(res.result === 'success') {
-          this.authService.saveSession(res.data);
-          this.user = res.data; 
-          this.selectedFile = null; 
-          
-          this.presentToast('Profil berhasil diperbarui!');
-          this.cdr.detectChanges(); 
-        } else {
-          this.presentToast('Gagal update: ' + res.message);
+    try {
+      // 3. COBA TAMPILKAN LOADING
+      alert('2. Mencoba loading...');
+      const loading = await this.loadingCtrl.create({ 
+        message: 'Menyimpan...',
+        spinner: 'crescent'
+      });
+      await loading.present();
+
+      // 4. KIRIM REQUEST
+      alert('3. Mengirim ke server: ' + environment.apiKey);
+      
+      this.authService.updateProfile(this.user.id, this.editName, this.selectedFile).subscribe({
+        next: async (res: any) => {
+          await loading.dismiss(); 
+          alert('4. Response: ' + JSON.stringify(res)); // LIHAT HASILNYA
+
+          if(res.result === 'success') {
+            this.authService.saveSession(res.data);
+            this.user = res.data; 
+            this.selectedFile = null; 
+            this.cdr.detectChanges(); 
+            // alert('SUKSES!');
+          } else {
+            // alert('GAGAL API: ' + res.message);
+          }
+        },
+        error: async (err) => {
+          await loading.dismiss();
+          alert('ERROR HTTP: ' + JSON.stringify(err)); // LIHAT ERRORNYA
         }
-      },
-      error: async (err) => {
-        await loading.dismiss();
-        console.error(err);
-        this.presentToast('Gagal koneksi server.');
-      }
-    });
-  }
+      });
 
-  async presentToast(msg: string) {
-    const toast = await this.toastCtrl.create({
-      message: msg,
-      duration: 2000,
-      position: 'bottom',
-      color: 'dark',
-      buttons: [{ text: 'OK', role: 'cancel' }]
-    });
-    await toast.present();
+    } catch (e) {
+      alert('CRASH SYSTEM: ' + e);
+    }
   }
 
   changeTheme(color: string) {
