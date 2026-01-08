@@ -9,6 +9,15 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      [pullingIcon]="refreshIcon"
+      pullingText="Tarik untuk refresh"
+      refreshingSpinner="circles"
+      refreshingText="."> <!-- sama kek categories buat spacing -->
+    </ion-refresher-content>
+  </ion-refresher>
+
   <div class="welcome-section ion-margin-bottom">
     <h1>Halo, <span class="user-name">{{ user?.fullname }}</span></h1>
     <p>Simak berita pilihan hari ini.</p>

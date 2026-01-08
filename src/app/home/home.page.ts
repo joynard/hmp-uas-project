@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth';
@@ -30,7 +30,7 @@ import {
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
-import { arrowForwardOutline, addCircleOutline, gridOutline } from 'ionicons/icons';
+import { arrowForwardOutline, addCircleOutline, gridOutline, chevronDownCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -69,9 +69,12 @@ export class HomePage implements OnInit {
   isToastOpen = false;
   toastMessage = '';
 
+  public refreshIcon = chevronDownCircleOutline;
+
   constructor(
     private authService: AuthService,
-    private newsService: NewsService
+    private newsService: NewsService,
+    private cdr: ChangeDetectorRef
   ) { addIcons({ arrowForwardOutline, addCircleOutline, gridOutline }); }
 
   ionViewWillEnter() {
@@ -88,9 +91,18 @@ export class HomePage implements OnInit {
 
   ngOnInit() {}
 
-  loadHighlights() {
+  loadHighlights(event?: any) {
     this.newsService.getNews().subscribe((res: any) => {
       this.highlights = res.slice(0, 5);
+      this.cdr.detectChanges(); // make sure always refresh
+      if (event) {
+        event.target.complete(); // complete the refresher
+      }
     });
   }
+
+  handleRefresh(event: any) {
+    this.loadHighlights(event);
+  }
+
 }
