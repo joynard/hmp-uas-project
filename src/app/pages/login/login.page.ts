@@ -43,7 +43,7 @@ import { mailOutline, lockClosedOutline, newspaper } from 'ionicons/icons';
     IonIcon, 
     IonText,
     IonImg,
-    IonToast // <--- 2. MASUKKAN KE SINI (WAJIB)
+    IonToast 
   ]
 })
 export class LoginPage implements OnInit {
@@ -51,14 +51,13 @@ export class LoginPage implements OnInit {
   email: string = '';
   password: string = '';
 
-  // 3. VARIABEL STATE TOAST
+  // state toast
   isToastOpen = false;
   toastMessage = '';
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    // private toastController: ToastController, <-- 4. HAPUS CONTROLLER
     private zone: NgZone 
   ) {
     addIcons({ mailOutline, lockClosedOutline, newspaper });
@@ -70,7 +69,6 @@ export class LoginPage implements OnInit {
     }
   }
 
-  // 5. HELPER FUNCTION
   setOpen(isOpen: boolean, msg: string = '') {
     this.toastMessage = msg;
     this.isToastOpen = isOpen;
@@ -78,7 +76,6 @@ export class LoginPage implements OnInit {
 
   async login() {
     if (!this.email || !this.password) {
-      // 6. GANTI CARA PANGGIL
       this.setOpen(true, 'Email dan Password harus diisi!');
       return;
     }
