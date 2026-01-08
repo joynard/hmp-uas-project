@@ -21,7 +21,8 @@ import {
   IonIcon, 
   IonButtons,
   IonMenuButton,
-  IonText
+  IonText,
+  IonSpinner
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -51,12 +52,14 @@ import { add, pricetagOutline, pricetagsOutline, chevronDownCircleOutline } from
     IonIcon, 
     IonButtons,
     IonMenuButton,
-    IonText
+    IonText,
+    IonSpinner
   ]
 })
 export class CategoriesPage implements OnInit {
 
   categories: any[] = [];
+  isLoading: boolean = true;
 
   constructor(
     private categoryService: CategoryService,
@@ -78,37 +81,31 @@ export class CategoriesPage implements OnInit {
     this.loadData(true, event);
   }
 
-  async loadData(isRefresher: boolean = false, event?: any) {
-    let loading: any;
-
+  loadData(isRefresher: boolean = false, event?: any) {
+    // Jika bukan refresh tarik, nyalakan loading layar
     if (!isRefresher) {
-      loading = await this.loadingCtrl.create({ message: 'Memuat kategori...' });
-      await loading.present();
+      this.isLoading = true;
     }
 
     this.categoryService.getCategories().subscribe({
       next: (res: any) => {
-        this.zone.run(() => {
-          
-          if (Array.isArray(res)) {
-            this.categories = res;
-          } else if (res && res.data && Array.isArray(res.data)) {
-            this.categories = res.data;
-          } else {
-            this.categories = [];
-          }
-
-          console.log('Data loaded:', this.categories); // debug console
-          this.cdr.detectChanges(); 
-        });
+        if (Array.isArray(res)) {
+          this.categories = res;
+        } else if (res && res.data && Array.isArray(res.data)) {
+          this.categories = res.data;
+        } else {
+          this.categories = [];
+        }
+        this.isLoading = false; // destroy loading
+        this.cdr.detectChanges();
         
-        if (isRefresher && event) event.target.complete(); 
-        if (loading) loading.dismiss(); 
+        if (isRefresher && event) event.target.complete();
       },
       error: (err) => {
         console.error(err);
+        this.isLoading = false; 
+        this.cdr.detectChanges();
         if (isRefresher && event) event.target.complete();
-        if (loading) loading.dismiss();
       }
     });
   }

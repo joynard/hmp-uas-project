@@ -10,35 +10,32 @@
 <ion-content [fullscreen]="true">
   
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-    <ion-refresher-content
-      pullingIcon="chevron-down-circle-outline"
-      pullingText="Tarik untuk refresh"
-      refreshingSpinner="circles"
-      refreshingText="Memuat ulang...">
-    </ion-refresher-content>
+    <ion-refresher-content pullingText="Tarik untuk refresh"></ion-refresher-content>
   </ion-refresher>
 
-  <div *ngIf="categories.length === 0" class="empty-state">
-    <ion-icon name="pricetags-outline"></ion-icon>
-    <h3>Belum Ada Kategori</h3>
-    <p>Tekan tombol + untuk menambahkan kategori baru.</p>
+  <div *ngIf="isLoading" class="ion-text-center ion-padding" style="margin-top: 50px;">
+    <ion-spinner name="crescent" color="primary" style="transform: scale(1.5);"></ion-spinner>
+    <p style="margin-top: 15px; color: var(--ion-color-medium);">Sedang memuat data...</p>
   </div>
 
-  <ion-list lines="full" *ngIf="categories.length > 0">
-    
-    <ion-item 
-      *ngFor="let item of categories" 
-      button 
-      detail 
-      [routerLink]="['/news-category', item.id]">
-      
-      <ion-icon slot="start" name="pricetag-outline" color="primary"></ion-icon>
-      <ion-label>
-        <h2>{{ item.name }}</h2>
-      </ion-label>
-    </ion-item>
+  <div *ngIf="!isLoading">
 
-  </ion-list>
+    <div *ngIf="categories.length === 0" class="empty-state">
+      <ion-icon name="pricetags-outline"></ion-icon>
+      <h3>Belum Ada Kategori</h3>
+      <p>Tekan tombol + untuk menambahkan kategori baru.</p>
+    </div>
+
+    <ion-list lines="full" *ngIf="categories.length > 0">
+      <ion-item *ngFor="let item of categories" button detail [routerLink]="['/news-category', item.id]">
+        <ion-icon slot="start" name="pricetag-outline" color="primary"></ion-icon>
+        <ion-label>
+          <h2>{{ item.name }}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  
+  </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button routerLink="/category-create" class="header-gradient">
