@@ -101,8 +101,8 @@ export class MyFavoritesPage implements OnInit {
   async removeFavorite(event: any, news_id: number) {
     event.stopPropagation();
 
-    const loading = await this.loadingCtrl.create({ message: 'Menghapus...' });
-    await loading.present();
+    // const loading = await this.loadingCtrl.create({ message: 'Menghapus...' });
+    // await loading.present();
 
     this.newsService.toggleFavorite(news_id, this.user.id).subscribe({
       next: (res: any) => {
