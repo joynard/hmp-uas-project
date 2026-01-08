@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth';
-import { ToastController } from '@ionic/angular'; // Service tetap dari @ionic/angular
+import { ToastController } from '@ionic/angular'; 
 
 // --- IMPORT STANDALONE COMPONENTS ---
 import { 
@@ -12,12 +12,12 @@ import {
   IonToolbar, 
   IonTitle, 
   IonItem, 
-  IonInput,     // <--- WAJIB ADA (Solusi Error setFocus)
+  IonInput,
   IonButton, 
   IonIcon, 
   IonLabel,
-  IonText,      // Untuk pesan error kecil jika ada
-  IonButtons, IonBackButton, IonList
+  IonText,
+  IonButtons, IonBackButton, IonList, IonToast
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -42,7 +42,7 @@ import { personOutline, mailOutline, lockClosedOutline } from 'ionicons/icons';
     IonIcon, 
     IonLabel,
     IonText,
-    IonButtons, IonBackButton, IonList
+    IonButtons, IonBackButton, IonList, IonToast
   ]
 })
 export class RegisterPage implements OnInit {
@@ -52,62 +52,72 @@ export class RegisterPage implements OnInit {
   password: string = '';
   confirmPassword: string = '';
 
+  isToastOpen = false;
+  toastMessage = '';
+
   constructor(
     private authService: AuthService,
-    private toastController: ToastController,
     private router: Router
   ) { addIcons({ personOutline, mailOutline, lockClosedOutline });}
 
   ngOnInit() { }
 
+  isValidEmail(email: string) {
+    // Mengecek harus ada karakter + @ + karakter + . + karakter
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(email);
+  }
+
   async register() {
-    // 1. Validasi Input Kosong
+    // kosong
     if (!this.fullname || !this.email || !this.password || !this.confirmPassword) {
-      this.presentToast('Semua kolom harus diisi!');
+      this.setOpen(true, 'Semua kolom harus diisi!');
       return;
     }
 
-    // 2. Validasi Nama (Tidak boleh ada angka)
+    // format email
+    if (!this.isValidEmail(this.email)) {
+      this.setOpen(true, 'Format email salah! (Contoh: user@domain.com)');
+      return;
+    }
+
+    // nama nda bole angka
     const hasNumber = /\d/; 
     if (hasNumber.test(this.fullname)) {
-      this.presentToast('Nama tidak boleh mengandung angka!');
+      this.setOpen(true, 'Nama tidak boleh mengandung angka!');
       return;
     }
 
-    // 3. Validasi Panjang Password
+    // panjang Password
     if (this.password.length < 8) {
-      this.presentToast('Password minimal 8 karakter!');
+      this.setOpen(true, 'Password minimal 8 karakter!');
       return;
     }
 
-    // 4. Validasi Konfirmasi Password
+    // konfirmasi Password
     if (this.password !== this.confirmPassword) {
-      this.presentToast('Konfirmasi password tidak cocok!');
+      this.setOpen(true, 'Konfirmasi password tidak cocok!');
       return;
     }
 
     this.authService.register(this.fullname, this.email, this.password).subscribe({
       next: (response: any) => {
         if (response.result === 'success') {
-          this.presentToast('Register Berhasil! Silahkan Login.');
+          this.setOpen(true, 'Register Berhasil! Silahkan Login.');
           this.router.navigateByUrl('/login');
         } else {
-          this.presentToast(response.message);
+          // catch error dari php
+          this.setOpen(true, response.message);
         }
       },
       error: (err) => {
-        this.presentToast('Gagal koneksi: ' + JSON.stringify(err));
+        this.setOpen(true, 'Gagal koneksi: ' + JSON.stringify(err));
       }
     });
   }
 
-  async presentToast(msg: string) {
-    const toast = await this.toastController.create({
-      message: msg,
-      duration: 2000,
-      position: 'bottom',
-      color: 'dark'
-    });
-    toast.present();
+  setOpen(isOpen: boolean, msg: string = '') {
+    this.toastMessage = msg;
+    this.isToastOpen = isOpen;
   }
 }

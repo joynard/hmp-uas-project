@@ -63,9 +63,18 @@
 
     </ion-list>
 
-    <ion-button expand="block" (click)="register()" class="btn-submit header-gradient">
+    <ion-button type="button" expand="block" (click)="register()" class="btn-submit header-gradient">
       DAFTAR SEKARANG
     </ion-button>
 
   </div>
+
+  <ion-toast
+    [isOpen]="isToastOpen"
+    [message]="toastMessage"
+    [duration]="2000"
+    position="bottom"
+    (didDismiss)="setOpen(false)"
+  ></ion-toast>
+
 </ion-content>
