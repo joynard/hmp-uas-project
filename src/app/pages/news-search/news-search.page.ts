@@ -20,7 +20,6 @@ import {
   IonText,
   IonIcon,
   IonButtons,
-  IonButton,
   IonMenuButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle
 } from '@ionic/angular/standalone';
 
@@ -43,10 +42,8 @@ import {
     IonLabel, 
     IonAvatar, 
     IonImg, 
-    IonText,
     IonIcon,
     IonButtons,
-    IonButton,
     IonMenuButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle
   ]
 })
