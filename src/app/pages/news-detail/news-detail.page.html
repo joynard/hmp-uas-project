@@ -14,10 +14,17 @@
 
 <ion-content [fullscreen]="true" class="ion-padding-bottom">
   
-  <div class="image-scroller">
-    <img [src]="news.thumbnail_url ? imgUrl + news.thumbnail_url : 'assets/no-img.jpgs'" class="main-img" />
-    <img *ngFor="let img of images" [src]="imgUrl + img" class="extra-img" />
+  <div class="wrapper">
+  <button (click)="scrollLeft()">‹</button>
+
+  <div class="image-scroller" #scroller>
+    <img [src]="news.thumbnail_url ? imgUrl + news.thumbnail_url : 'assets/no-img.jpg'" />
+    <img *ngFor="let img of images" [src]="imgUrl + img" />
   </div>
+
+  <button (click)="scrollRight()">›</button>
+</div>
+
 
   <div class="content-wrapper ion-padding">
     

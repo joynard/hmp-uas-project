@@ -44,6 +44,8 @@ import {
   paperPlaneOutline,
   personCircleOutline,
 } from 'ionicons/icons';
+import { ViewChild, ElementRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-news-detail',
@@ -76,6 +78,7 @@ import {
     IonNote
   ]
 })
+
 export class NewsDetailPage implements OnInit {
 
   newsId: number = 0;
@@ -113,6 +116,17 @@ export class NewsDetailPage implements OnInit {
       personCircleOutline
     });
    }
+
+   @ViewChild('scroller') scroller!: ElementRef;
+
+    scrollLeft() {
+      this.scroller.nativeElement.scrollLeft -= 200;
+    }
+
+    scrollRight() {
+      this.scroller.nativeElement.scrollLeft += 200;
+    }
+
 
   ngOnInit() {
     this.user = this.authService.getUser();
@@ -232,4 +246,5 @@ export class NewsDetailPage implements OnInit {
     const toast = await this.toastCtrl.create({ message: msg, duration: 2000 });
     toast.present();
   }
+
 }

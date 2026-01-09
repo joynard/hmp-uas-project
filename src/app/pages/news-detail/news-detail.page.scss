@@ -1,23 +1,23 @@
 /* 1. IMAGE SCROLLER */
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .image-scroller {
   display: flex;
-  gap: 12px;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  width: 100%;
 }
 
-.image-scroller::-webkit-scrollbar {
-  display: none; /* biar clean */
-}
-
-.img {
-  width: 220px;
+.image-scroller img {
+  width: 200px;
   height: 140px;
   object-fit: cover;
+  margin-right: 10px;
   flex-shrink: 0;
-  border-radius: 8px;
-  scroll-snap-align: start;
 }
 
 
