@@ -1,21 +1,25 @@
 /* 1. IMAGE SCROLLER */
 .image-scroller {
   display: flex;
+  gap: 12px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  background: #f0f0f0;
-  height: 250px;
-  
-  /* Sembunyikan scrollbar tapi tetap bisa scroll */
-  &::-webkit-scrollbar { display: none; }
-
-  img {
-    scroll-snap-align: center;
-    height: 100%;
-    min-width: 100%; /* Gambar memenuhi lebar layar */
-    object-fit: cover;
-  }
+  -webkit-overflow-scrolling: touch;
 }
+
+.image-scroller::-webkit-scrollbar {
+  display: none; /* biar clean */
+}
+
+.img {
+  width: 220px;
+  height: 140px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 8px;
+  scroll-snap-align: start;
+}
+
 
 /* 2. TYPOGRAPHY & META */
 .news-title {
