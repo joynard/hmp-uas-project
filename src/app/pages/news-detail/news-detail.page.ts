@@ -17,18 +17,8 @@ import {
   IonBackButton, // Tombol Kembali di Header
   IonButton, 
   IonIcon, 
-  IonImg, 
-  IonText, 
-  IonBadge,      // Badge Kategori
-  IonCard, 
-  IonCardContent, 
-  IonList, 
-  IonItem, 
-  IonAvatar, 
-  IonLabel, 
   IonFooter,     // Footer Input Komen
   IonInput,      // Input Komen
-  IonNote
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -63,19 +53,9 @@ import { ViewChild, ElementRef } from '@angular/core';
     IonButtons, 
     IonBackButton, 
     IonButton, 
-    IonIcon, 
-    IonImg, 
-    IonText, 
-    IonBadge, 
-    IonCard, 
-    IonCardContent, 
-    IonList, 
-    IonItem, 
-    IonAvatar, 
-    IonLabel, 
+    IonIcon,
     IonFooter, 
-    IonInput, 
-    IonNote
+    IonInput,
   ]
 })
 
@@ -115,9 +95,9 @@ export class NewsDetailPage implements OnInit {
       paperPlaneOutline,
       personCircleOutline
     });
-   }
+  }
 
-   @ViewChild('scroller') scroller!: ElementRef;
+  @ViewChild('scroller') scroller!: ElementRef;
 
     scrollLeft() {
       this.scroller.nativeElement.scrollLeft -= 200;
