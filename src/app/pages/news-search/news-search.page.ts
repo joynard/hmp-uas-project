@@ -38,10 +38,6 @@ import {
     IonTitle, 
     IonSearchbar, 
     IonList, 
-    IonItem, 
-    IonLabel, 
-    IonAvatar, 
-    IonImg, 
     IonIcon,
     IonButtons,
     IonMenuButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle
@@ -62,9 +58,10 @@ export class NewsSearchPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loadNews();
+    this.loadNews(); // load all news on init
   }
 
+  // load news function
   loadNews() {
     this.newsService.getNews().subscribe({
       next: (res: any) => {
@@ -76,6 +73,7 @@ export class NewsSearchPage implements OnInit {
     });
   }
 
+  // handle search input
   handleSearch(event: any) {
     const query = event.target.value.toLowerCase();
     this.searchQuery = query;

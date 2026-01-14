@@ -51,8 +51,6 @@ import { add, pricetagOutline, pricetagsOutline, chevronDownCircleOutline } from
     IonIcon, 
     IonButtons,
     IonMenuButton,
-    IonText,
-    IonSpinner
   ]
 })
 export class CategoriesPage implements OnInit {

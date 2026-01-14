@@ -62,9 +62,6 @@ import {
     IonTextarea,
     IonSelect,
     IonSelectOption,
-    IonText,
-    IonThumbnail,
-    IonImg,
     IonBackButton,
     IonToast 
   ]

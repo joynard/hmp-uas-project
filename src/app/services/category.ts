@@ -10,7 +10,7 @@ export class CategoryService {
   constructor(private http: HttpClient) { }
 
   getCategories() {
-    const timestamp = new Date().getTime(); // Untuk mencegah cache
+    const timestamp = new Date().getTime(); // untuk mencegah cache
     return this.http.get(environment.apiKey + 'categories.php?t=' + timestamp);
   }
 

@@ -15,8 +15,6 @@ import {
   IonInput,
   IonButton, 
   IonIcon, 
-  IonLabel,
-  IonText,
   IonButtons, IonBackButton, IonList, IonToast
 } from '@ionic/angular/standalone';
 
@@ -61,7 +59,7 @@ export class RegisterPage implements OnInit {
   ngOnInit() { }
 
   isValidEmail(email: string) {
-    // Mengecek harus ada karakter + @ + karakter + . + karakter
+    // mengecek harus ada karakter + @ + karakter + . + karakter
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return re.test(email);
   }
@@ -86,13 +84,13 @@ export class RegisterPage implements OnInit {
       return;
     }
 
-    // panjang Password
+    // panjang password
     if (this.password.length < 8) {
       this.setOpen(true, 'Password minimal 8 karakter!');
       return;
     }
 
-    // konfirmasi Password
+    // konfirmasi password
     if (this.password !== this.confirmPassword) {
       this.setOpen(true, 'Konfirmasi password tidak cocok!');
       return;

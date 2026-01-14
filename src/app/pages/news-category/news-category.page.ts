@@ -47,16 +47,11 @@ import { newspaperOutline } from 'ionicons/icons';
     IonButtons, 
     IonBackButton, 
     IonList, 
-    IonItem, 
-    IonLabel, 
     IonCard, 
     IonCardHeader, 
     IonCardTitle, 
-    IonCardSubtitle, 
-    IonCardContent, 
-    IonImg, 
+    IonCardSubtitle,
     IonSpinner, 
-    IonText,
     IonIcon
   ]
 })

@@ -13,7 +13,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
     this.loadTheme();
-   }
+  }
 
   register(fullname: string, email: string, password: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });

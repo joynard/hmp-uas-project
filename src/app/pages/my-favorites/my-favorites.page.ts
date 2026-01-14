@@ -44,18 +44,12 @@ import { trashOutline, newspaperOutline } from 'ionicons/icons';
     IonHeader, 
     IonToolbar, 
     IonTitle, 
-    IonList, 
-    IonItem, 
-    IonLabel, 
+    IonList,
     IonCard, 
     IonCardHeader, 
     IonCardTitle, 
-    IonCardSubtitle, 
-    IonImg, 
-    IonButton, 
+    IonCardSubtitle,
     IonIcon, 
-    IonText,
-    IonThumbnail,
     IonButtons, IonMenuButton
   ]
 })

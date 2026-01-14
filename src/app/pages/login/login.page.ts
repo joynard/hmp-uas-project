@@ -33,16 +33,11 @@ import { mailOutline, lockClosedOutline, newspaper } from 'ionicons/icons';
     FormsModule, 
     RouterLink,
     IonContent, 
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
     IonList, 
     IonItem, 
     IonInput, 
     IonButton, 
-    IonIcon, 
-    IonText,
-    IonImg,
+    IonIcon,
     IonToast 
   ]
 })
@@ -61,7 +56,7 @@ export class LoginPage implements OnInit {
     private zone: NgZone 
   ) {
     addIcons({ mailOutline, lockClosedOutline, newspaper });
-   }
+  }
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
