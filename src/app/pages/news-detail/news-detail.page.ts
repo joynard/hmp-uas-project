@@ -14,7 +14,7 @@ import {
   IonToolbar, 
   IonTitle, 
   IonButtons, 
-  IonBackButton, // Tombol Kembali di Header
+  IonBackButton, // ombol Kembali di Header
   IonButton, 
   IonIcon, 
   IonFooter,     // Footer Input Komen
