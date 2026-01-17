@@ -40,45 +40,47 @@ This project was built to fulfill the **Hybrid Mobile Programming** course requi
 * **Database**: MySQL / MariaDB.
 * **Tools**: Visual Studio Code, Postman, XAMPP.
 
-## 🚀 Installation Guide
+## 🚀 Installation & Demo
+
+Good news! This project is connected to a **Live Cloud Backend**. You **DO NOT** need to set up XAMPP, MySQL, or configure any local server to run this application.
 
 ### Prerequisites
 * Node.js & NPM installed.
-* Ionic CLI installed (`npm install -g @ionic/cli`).
-* Web Server (XAMPP/MAMP) for PHP & MySQL.
+* Ionic CLI installed globally:
+  ```bash
+  npm install -g @ionic/cli
 
-### 1. Backend Setup
-1.  Start **Apache** and **MySQL** in XAMPP.
-2.  Create a new database named `db_news` in phpMyAdmin.
-3.  Import the provided SQL file located in `backend/database.sql`.
-4.  Move the PHP API folder to your `htdocs` directory.
+### Quick Start
 
-### 2. Frontend Setup
-1.  Clone this repository:
-    ```bash
-    git clone [https://github.com/username/project-name.git](https://github.com/username/project-name.git)
-    ```
-2.  Navigate to the project directory:
-    ```bash
-    cd project-name
-    ```
-3.  Install dependencies:
-    ```bash
-    npm install
-    ```
-4.  **Configure API Endpoint**:
-    Open `src/environments/environment.ts` and update the `apiKey` to match your local IP or domain:
-    ```typescript
-    export const environment = {
-      production: false,
-      // Replace with your machine's IP address if testing on real device
-      apiKey: 'http://localhost/your-api-folder/' 
-    };
-    ```
-5.  Run the app in the browser:
-    ```bash
-    ionic serve
-    ```
+1. **Clone the repository:**
+```bash
+git clone https://github.com/joynard/hmp-uas-project.git
+
+```
+
+
+2. **Navigate to project folder:**
+```bash
+cd project-name
+
+```
+
+
+3. **Install dependencies:**
+```bash
+npm install
+
+```
+
+
+4. **Run the App:**
+```bash
+ionic serve
+
+```
+
+The app will automatically launch in your browser and connect to the live server.
+
 
 ## 📱 Screenshots
 *(Add your screenshots here later)*
@@ -86,7 +88,13 @@ This project was built to fulfill the **Hybrid Mobile Programming** course requi
 ## 📄 License
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
-**Alexander Fabiano Joynard Lapod**
-* Informatics Student at Universitas Surabaya
-* [GitHub Profile](https://github.com/joynard)
+## 👨‍💻 Authors & Contributors
+
+* **Alexander F. J. Lapod** - *Lead Fullstack Developer* - [GitHub](https://github.com/joynard)
+    * *Responsible for system architecture, core features, frontend styling, and backend API.*
+    
+* **Kenny Varenne Tin Setyabudi** - *Quality Assurance (QA) & Co-Developer* - [GitHub](https://github.com/Noy-Varenne)
+    * *Responsible for feature testing, debugging, and additional feature implementation.*
+
+---
+*Built as a final project for Hybrid Mobile Programming Course, Universitas Surabaya.*
