@@ -83,7 +83,24 @@ The app will automatically launch in your browser and connect to the live server
 
 
 ## 📱 Screenshots
-*(Add your screenshots here later)*
+### All Pages Preview in Light Mode
+
+<img src="https://github.com/user-attachments/assets/b1b44f0d-586e-4683-8af7-1fd5e59da07c" width="30%" height="auto" alt="Page 1" style="margin: 5px;">
+<img src="https://github.com/user-attachments/assets/5d731600-56eb-45b0-974c-5cecaef0e74b" width="30%" height="auto" alt="Page 2" style="margin: 5px;">
+<img src="https://github.com/user-attachments/assets/77e80886-5888-4fa5-b54a-e9bf17c13532" width="30%" height="auto" alt="Page 3" style="margin: 5px;">
+
+<img src="https://github.com/user-attachments/assets/b09308b1-a2ba-4b4d-9c81-05eb3e9edc19" width="30%" height="auto" alt="Page 4" style="margin: 5px;">
+<img src="https://github.com/user-attachments/assets/bea55ae9-b54d-487a-97cd-4fcb6de54875" width="30%" height="auto" alt="Page 5" style="margin: 5px;">
+<img src="https://github.com/user-attachments/assets/3e95c936-e9b1-45ce-b471-32768264441b" width="30%" height="auto" alt="Page 6" style="margin: 5px;">
+
+<img src="https://github.com/user-attachments/assets/d76b077c-2402-44db-a389-e461e5d95abf" width="30%" height="auto" alt="Page 7" style="margin: 5px;">
+<img src="https://github.com/user-attachments/assets/2c64b0c4-baaa-440b-aaa9-fcb9d7dd66fa" width="30%" height="auto" alt="Page 8" style="margin: 5px;">
+<img src="https://github.com/user-attachments/assets/05f1b61a-a088-4714-b928-f9ef69995498" width="30%" height="auto" alt="Page 9" style="margin: 5px;">
+
+<img src="https://github.com/user-attachments/assets/682e23f4-cc00-4eaa-ba83-1da736f61418" width="30%" height="auto" alt="Page 10" style="margin: 5px;">
+<img src="https://github.com/user-attachments/assets/78fb1aae-c2be-485c-84e7-bd1eb949c6dd" width="30%" height="auto" alt="Page 11 (Landscape)" style="margin: 5px;">
+
+<img src="https://github.com/user-attachments/assets/43b571f4-9524-4a40-8b38-77800a432696" width="30%" height="auto" alt="Dark Mode Page" style="margin: 5px;">
 
 ## 📄 License
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
